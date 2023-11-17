@@ -8,6 +8,8 @@ import MyTrip from './MyTrip';
 import Header from './Header';
 import LoginModal from './LoginModal';
 import HotelModal from './HotelModal';
+import Checkout from './Checkout';
+import Payment from './Payment';
 
 export const AuthContext = createContext();
 
@@ -20,21 +22,40 @@ function App() {
     loggedInState = true;
   } else {
     loggedInState = false;
-    // loginModalState = true;
   }
 
-  // if(loginModalState){
-  //   return <LoginModal />
-  // }
-
+  const [roomCount, setRoomCount] = useState(1);
   const [isLoggedIn, setIsLoggedIn] = useState(loggedInState);
   const [loginModal, setLoginModal] = useState();
   const [profileModal, setProfileModal] = useState(false);
   const [departure, setDeparture] = useState('');
-  const [arrival, setArrival] = useState(''); 
-  const [hotelLocation , setHotelLocation] = useState('');
-  const [selectedHotel , setSelectedHotel] = useState('');
+  const [arrival, setArrival] = useState('');
+  const [hotelLocation, setHotelLocation] = useState('');
+  const [selectedHotel, setSelectedHotel] = useState('');
   const [hotelLocationArray, setHotelLocationArray] = useState([]);
+  const [selectedRoom, setSelectedRoom] = useState({});
+  const [hotelDetail, setHotelDetail] = useState({});
+  const [flightDay, setFlightDay] = useState("");
+  const [flightDayTwo, setFlightDayTwo] = useState("");
+  const [selectedFlightTrip, setSelectedFlightTrip] = useState("");
+  const [selectedFlightData, setSelectedFlightData] = useState();
+  const [selectedHotelData, setSelectedHotelData] = useState({});
+  const [calenderDateDifference, setCalenderDateDifference] = useState();
+  const [startDate, setStartDate] = useState();
+  const [endDate, setEndDate] = useState();
+  const [flightClass, setFlightClass] = useState('Economy');
+  const [adultCount, setAdultCount] = useState(0);
+  const [childCount, setChildCount] = useState(0);
+  const [infantCount, setInfantCount] = useState(0);
+  const [hotelAdultCount, setHotelAdultCount] = useState(0);
+  const [hotelChildCount, setHotelChildCount] = useState(0);
+  const [isActive, setIsActive] = useState(false);
+  const [isActivePassanger, setIsActivePassanger] = useState(false);
+  const [flightDepartureHiddenDiv, setFlightDepartureHiddenDiv] = useState(false);
+  const [flightArrivalHiddenDiv, setFlightArrivalHiddenDiv] = useState(false);
+  const [showDate, setShowDate] = useState(false);
+  const [hiddenDiv, setHiddenDiv] = useState(false);
+  const [hotelLocationHiddenDiv, setHotelLocationHiddenDiv] = useState(false);
 
   const updateDeparture = (value) => {
     setDeparture(value);
@@ -49,7 +70,7 @@ function App() {
   }
 
   return (<>
-    <AuthContext.Provider value={{ isLoggedIn, setIsLoggedIn, loginModal, setLoginModal, profileModal, setProfileModal , departure , arrival , updateDeparture , updateArrival , updateHotelLocation , hotelLocation , selectedHotel , setSelectedHotel , hotelLocationArray , setHotelLocationArray}}>
+    <AuthContext.Provider value={{ isActive, setIsActive, isActivePassanger, setIsActivePassanger, flightDepartureHiddenDiv, setFlightDepartureHiddenDiv, flightArrivalHiddenDiv, setFlightArrivalHiddenDiv, showDate, setShowDate , hiddenDiv, setHiddenDiv , hotelLocationHiddenDiv, setHotelLocationHiddenDiv , roomCount, setRoomCount, isLoggedIn, setIsLoggedIn, loginModal, setLoginModal, profileModal, setProfileModal, departure, arrival, updateDeparture, updateArrival, updateHotelLocation, hotelLocation, selectedHotel, setSelectedHotel, hotelLocationArray, setHotelLocationArray, selectedRoom, setSelectedRoom, hotelDetail, setHotelDetail, flightDay, setFlightDay, flightDayTwo, setFlightDayTwo, selectedFlightTrip, setSelectedFlightTrip, selectedFlightData, setSelectedFlightData, selectedHotelData, setSelectedHotelData, calenderDateDifference, setCalenderDateDifference, startDate, setStartDate, endDate, setEndDate, flightClass, setFlightClass, adultCount, setAdultCount, childCount, setChildCount, infantCount, setInfantCount, hotelAdultCount, setHotelAdultCount, hotelChildCount, setHotelChildCount }}>
       <Header />
 
       <Routes>
@@ -59,6 +80,8 @@ function App() {
         <Route path='/hotel' element={<Hotel />} />
         <Route path='/mytrip' element={<MyTrip />} />
         <Route path='/hotelModal' element={<HotelModal />} />
+        <Route path='/checkout' element={<Checkout />} />
+        <Route path='/payment' element={<Payment />} />
       </Routes>
     </AuthContext.Provider>
   </>

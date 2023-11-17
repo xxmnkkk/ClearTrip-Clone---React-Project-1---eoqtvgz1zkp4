@@ -1,35 +1,373 @@
 import axios from "axios"
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useState , useRef} from "react";
 import { AuthContext } from "./App";
+import DesAndArr from "./DesAndArr";
+import DateSelector from "./DateSelector";
+import { FaArrowRightLong } from "react-icons/fa6";
+import { useNavigate } from "react-router-dom";
+
+
+
 
 export default function Flight() {
+    const {startDay , endDay , startDate, endDate, isLoggedIn, setLoginModal, departure, arrival, flightDay, flightDayTwo, selectedFlightTrip, selectedFlightData, setSelectedFlightData } = useContext(AuthContext);
 
-    const { departure, arrival } = useContext(AuthContext);
-    console.log(departure, " ", arrival);
+    console.log("start date: ",startDate );
+    console.log("end date: ", endDate);
+    console.log("day: ", flightDay);
+    console.log("day2: ", flightDayTwo);
 
-    useEffect(() => {
-        const config = {
-            search: {
+    const navigate = useNavigate();
+    const selectedFlightDivRef = useRef(null);
+
+    const [flights, setFlights] = useState({
+        data: {
+            flights: []
+        }
+    });
+
+    const [flightsTwo, setFlightsTwo] = useState({
+        data: {
+            flights: []
+        }
+    });
+
+    const [selectedToFlights, setSelectedToFlights] = useState([]);
+    const [selectedBackFlights, setSelectedBackFlights] = useState([]);
+    const [selectedStopsFilter, setSelectedStopsFilter] = useState(null);
+
+    console.log("Selected flight data: ", selectedFlightData);
+
+    console.log("Flight Data: ", flights.data.flights);
+    console.log("Flight Data Two: ", flightsTwo.data.flights);
+
+    if (selectedFlightTrip === "oneway" || selectedFlightTrip === "One way") {
+        useEffect(() => {
+            const queryParams = {
                 source: departure,
                 destination: arrival,
-            },
-            headers: {
-                "Content-type": "application/json",
-                "projectID": "f104bi07c490",
-            }
-        };
+                day: flightDay
+            };
 
-        axios.get("https://academics.newtonschool.co/api/v1/bookingportals/flight/", config)
-            .then((response) => {
-                console.log(response.data)
-            })
-            .catch((error) => {
-                console.log(error);
-            })
-    }, []);
+            const config = {
+                headers: {
+                    "Content-type": "application/json",
+                    "projectID": "f104bi07c490",
+                },
+                params: queryParams
+            };
+
+            axios.get("https://academics.newtonschool.co/api/v1/bookingportals/flight/", config)
+                .then((response) => {
+                    setFlights(response.data);
+                })
+                .catch((error) => {
+                    console.log(error);
+                })
+        }, [departure, arrival, flightDay]);
+    } else {
+        useEffect(() => {
+            const queryParams = {
+                source: departure,
+                destination: arrival,
+                day: flightDay
+            };
+
+            const config = {
+                headers: {
+                    "Content-type": "application/json",
+                    "projectID": "f104bi07c490",
+                },
+                params: queryParams
+            };
+
+            axios.get("https://academics.newtonschool.co/api/v1/bookingportals/flight/", config)
+                .then((response) => {
+                    setFlights(response.data);
+                })
+                .catch((error) => {
+                    console.log(error);
+                })
+        }, [departure, arrival, flightDay]);
+
+
+        useEffect(() => {
+            const queryParams = {
+                source: arrival,
+                destination: departure,
+                day: flightDay
+            };
+
+            const config = {
+                headers: {
+                    "Content-type": "application/json",
+                    "projectID": "f104bi07c490",
+                },
+                params: queryParams
+            };
+
+            axios.get("https://academics.newtonschool.co/api/v1/bookingportals/flight/", config)
+                .then((response) => {
+                    setFlightsTwo(response.data);
+                })
+                .catch((error) => {
+                    console.log(error);
+                })
+        }, [departure, arrival, flightDayTwo]);
+    }
+
+    const flightData = flights.data.flights;
+    const flightDataTwo = flightsTwo.data.flights;
+
+    const handleSelectFlight = (flight) => {
+        setSelectedToFlights([flight]);
+
+        if (selectedFlightDivRef.current) {
+            selectedFlightDivRef.current.scrollIntoView({ behavior: "smooth" });
+        }
+    };
+
+    const handleSelectFlight2 = (flight) => {
+        setSelectedBackFlights([flight]);
+
+        if (selectedFlightDivRef.current) {
+            selectedFlightDivRef.current.scrollIntoView({ behavior: "smooth" });
+        }
+    };
+
+    const handleBookFlight = () => {
+        if (selectedToFlights.length > 0) {
+            const selectedFlights = selectedBackFlights.length > 0
+                ? [selectedToFlights[0], selectedBackFlights[0]]
+                : [selectedToFlights[0]];
+
+            setSelectedFlightData(selectedFlights);
+        }
+
+        if (isLoggedIn) {
+            navigate("/checkout")
+        } else {
+            setLoginModal(true);
+        }
+    };
+
+    const handleStopsChange = (event) => {
+        setSelectedStopsFilter(event.target.value);
+    };
+
+    const filteredFlightData = flightData.filter((flight) => {
+        return (
+            (!selectedStopsFilter || flight.stops === parseInt(selectedStopsFilter))
+        );
+    });
+
+    const filteredFlightDataTwo = flightDataTwo.filter((flight) => {
+        return (
+            (!selectedStopsFilter || flight.stops === parseInt(selectedStopsFilter))
+        );
+    });
 
     return <>
-        {/* <button onClick={handleFlightData}>Check flight api</button> */}
-        <div>flight</div>
+        <div className="flight-container" ref={selectedFlightDivRef}>
+            <div className="flight-modify-search-container">
+                <div className="dep-and-arr-div">
+                    <DesAndArr />
+                    {/* <DateSelector /> */}
+                </div>
+            </div>
+
+            <div className="flight-filter-and-flightinfo-container">
+                <div className="filter-container">
+                    <div className="filter-stop-container">
+                        <h2>Stops</h2>
+                        <div className="stop-selection-container">
+                            <div className="stops-selection">
+                                <label>
+                                    <input type="radio" name="stops" value="0" onChange={handleStopsChange} /> Non-stop
+                                </label>
+                            </div>
+                            <div className="stops-selection">
+                                <label>
+                                    <input type="radio" name="stops" value="1" onChange={handleStopsChange} /> 1 stop
+                                </label>
+                            </div>
+                            <div className="stops-selection">
+                                <label>
+                                    <input type="radio" name="stops" value="2" onChange={handleStopsChange} /> 2 stops
+                                </label>
+                            </div>
+                            <div className="stops-selection">
+                                <label>
+                                    <input type="radio" name="stops" onChange={() => setSelectedStopsFilter(null)} /> Default
+                                </label>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+                <div className="flight-information-section">
+                    <div className="selected-flight-div">
+                        {selectedToFlights.length > 0 &&
+                            <div className="selected-flight-to">
+                                {selectedToFlights.map((selectedFlight, index) => (
+                                    <div className="selected-flight-card" key={index}>
+                                        <div className="selected-flight-name-container">
+                                            <div className="selected-flight-name">
+                                                <img src="https://seeklogo.com/images/I/indigo-logo-EDBB4B3C09-seeklogo.com.png" />
+                                                <span className="selected-airline-name">IndiGo</span>
+                                            </div>
+                                            <span className="selected-flight-id">{selectedFlight.flightID}</span>
+                                        </div>
+
+                                        <div className="flight-info-container">
+                                            <div className="flight-source-and-departure-time-container">
+                                                <div className="flight-location-text">{selectedFlight.source}</div>
+                                                <div>{selectedFlight.departureTime}</div>
+                                            </div>
+
+                                            <div className="flight-duration-and-stop-container">
+                                                <div className="flight-hours">{selectedFlight.duration} hr</div>
+                                                <div className="flight-line-break"></div>
+                                                <div className="flight-stop-text">{selectedFlight.stops} stop</div>
+                                            </div>
+
+                                            <div className="flight-destination-and-arrival-time-container">
+                                                <div className="flight-location-text">{selectedFlight.destination}</div>
+                                                <div>{selectedFlight.arrivalTime}</div>
+                                            </div>
+                                        </div>
+
+                                        <div className="selected-flight-price-container">
+                                            <div className="selected-flight-price-text">₹ {selectedFlight.ticketPrice}</div>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        }
+
+                        {selectedBackFlights.length > 0 &&
+                            <div className="selected-flight-from">
+                                {selectedBackFlights.map((selectedFlight, index) => (
+                                    <div className="selected-flight-card" key={index}>
+                                        <div className="selected-flight-name-container">
+                                            <div className="selected-flight-name">
+                                                <img src="https://seeklogo.com/images/I/indigo-logo-EDBB4B3C09-seeklogo.com.png" />
+                                                <span className="selected-airline-name">IndiGo</span>
+                                            </div>
+                                            <span className="selected-flight-id">{selectedFlight.flightID}</span>
+                                        </div>
+
+                                        <div className="flight-info-container">
+                                            <div className="flight-source-and-departure-time-container">
+                                                <div className="flight-location-text">{selectedFlight.source}</div>
+                                                <div>{selectedFlight.departureTime}</div>
+                                            </div>
+
+                                            <div className="flight-duration-and-stop-container">
+                                                <div className="flight-hours">{selectedFlight.duration} hr</div>
+                                                <div className="flight-line-break"></div>
+                                                <div className="flight-stop-text">{selectedFlight.stops} stop</div>
+                                            </div>
+
+                                            <div className="flight-destination-and-arrival-time-container">
+                                                <div className="flight-location-text">{selectedFlight.destination}</div>
+                                                <div>{selectedFlight.arrivalTime}</div>
+                                            </div>
+                                        </div>
+
+                                        <div className="selected-flight-price-container">
+                                            <div className="selected-flight-price-text">₹ {selectedFlight.ticketPrice}</div>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        }
+
+                        {(selectedToFlights.length > 0 || selectedBackFlights.length > 0) && (
+                            <button onClick={handleBookFlight} className="flight-book-button">Book flight</button>
+                        )}
+                    </div>
+
+                    <h1 className="flight-heading">{departure} <FaArrowRightLong /> {arrival}</h1>
+                    {filteredFlightData.map((flight, index) => (
+                        <div className="flightinfo-container" key={index}>
+                            <div className="flight-name-container">
+                                <img src="https://seeklogo.com/images/I/indigo-logo-EDBB4B3C09-seeklogo.com.png" />
+                                <span className="airline-name">IndiGo</span>
+                                <span className="flight-id">{flight.flightID}</span>
+                            </div>
+
+                            <div className="flight-info-container">
+                                <div className="flight-source-and-departure-time-container">
+                                    <div className="flight-location-text">{flight.source}</div>
+                                    <div>{flight.departureTime}</div>
+                                </div>
+
+                                <div className="flight-duration-and-stop-container">
+                                    <div className="flight-hours">{flight.duration} hr</div>
+                                    <div className="flight-line-break"></div>
+                                    <div className="flight-stop-text">{flight.stops} stop</div>
+                                </div>
+
+                                <div className="flight-destination-and-arrival-time-container">
+                                    <div className="flight-location-text">{flight.destination}</div>
+                                    <div>{flight.arrivalTime}</div>
+                                </div>
+                            </div>
+
+                            <div className="flight-price-container">
+                                <div className="flight-seats-text">{flight.availableSeats} seats left</div>
+                                <div className="flight-price-text">₹ {flight.ticketPrice}</div>
+                                <button onClick={() => handleSelectFlight(flight)} className="flight-select-button">Select</button>
+                            </div>
+                        </div>
+                    ))}
+
+                    <br />
+                    <br />
+                    <br />
+
+                    {selectedFlightTrip === "Round trip" &&
+                        <>
+                            <h1 className="flight-heading">{arrival} <FaArrowRightLong /> {departure}</h1>
+                            {filteredFlightDataTwo.map((flight, index) => (
+                                <div className="flightinfo-container" key={index}>
+                                    <div className="flight-name-container">
+                                        <img src="https://seeklogo.com/images/I/indigo-logo-EDBB4B3C09-seeklogo.com.png" />
+                                        <span className="airline-name">IndiGo</span>
+                                        <span className="flight-id">{flight.flightID}</span>
+                                    </div>
+
+                                    <div className="flight-info-container">
+                                        <div className="flight-source-and-departure-time-container">
+                                            <div className="flight-location-text">{flight.source}</div>
+                                            <div>{flight.departureTime}</div>
+                                        </div>
+
+                                        <div className="flight-duration-and-stop-container">
+                                            <div className="flight-hours">{flight.duration} hr</div>
+                                            <div className="flight-line-break"></div>
+                                            <div className="flight-stop-text">{flight.stops} stop</div>
+                                        </div>
+
+                                        <div className="flight-destination-and-arrival-time-container">
+                                            <div className="flight-location-text">{flight.destination}</div>
+                                            <div>{flight.arrivalTime}</div>
+                                        </div>
+                                    </div>
+
+                                    <div className="flight-price-container">
+                                        <div className="flight-seats-text">{flight.availableSeats} seats left</div>
+                                        <div className="flight-price-text">₹ {flight.ticketPrice}</div>
+                                        <button onClick={() => handleSelectFlight2(flight)} className="flight-select-button">Select</button>
+                                    </div>
+                                </div>
+                            ))}
+                        </>
+                    }
+                </div>
+            </div>
+        </div>
     </>
 } 

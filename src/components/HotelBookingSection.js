@@ -6,31 +6,26 @@ import { NavLink, useNavigate } from "react-router-dom";
 import { AuthContext } from "./App";
 
 function HotelBookingSection() {
-    const [roomCount, setRoomCount] = useState(1);
-    const [adultCount, setAdultCount] = useState(1);
-    const [childCount, setChildCount] = useState(0);
-    const [hiddenDiv, setHiddenDiv] = useState(false);
     const [hotelLocation, setHotelLocation] = useState("");
-    const [hotelLocationHiddenDiv, setHotelLocationHiddenDiv] = useState(false);
 
-    const { isLoggedIn, setLoginModal, updateHotelLocation } = useContext(AuthContext);
+    const { hiddenDiv, setHiddenDiv , hotelLocationHiddenDiv, setHotelLocationHiddenDiv , isLoggedIn, setLoginModal, updateHotelLocation , roomCount, setRoomCount , hotelAdultCount, setHotelAdultCount , hotelChildCount, setHotelChildCount , setShowDate} = useContext(AuthContext);
     const navigate = useNavigate();
     console.log(hotelLocationArray);
 
     const updateCount = (type, action) => {
         if (action === 'increment') {
             if (type === 'adult') {
-                setAdultCount(adultCount + 1);
+                setHotelAdultCount(hotelAdultCount + 1);
             } else if (type === 'child') {
-                setChildCount(childCount + 1);
+                setHotelChildCount(hotelChildCount + 1);
             } else if (type === 'room') {
                 setRoomCount(roomCount + 1);
             }
         } else if (action === 'decrement') {
-            if (type === 'adult' && adultCount > 0) {
-                setAdultCount(adultCount - 1);
-            } else if (type === 'child' && childCount > 0) {
-                setChildCount(childCount - 1);
+            if (type === 'adult' && hotelAdultCount > 0) {
+                setHotelAdultCount(hotelAdultCount - 1);
+            } else if (type === 'child' && hotelChildCount > 0) {
+                setHotelChildCount(hotelChildCount - 1);
             } else if (type === 'room' && roomCount > 0) {
                 setRoomCount(roomCount - 1);
             }
@@ -41,6 +36,8 @@ function HotelBookingSection() {
 
     const handleGuests = () => {
         setHiddenDiv(!hiddenDiv);
+        setHotelLocationHiddenDiv(false);
+        setShowDate(false);
     }
 
     // const handelHotelInputChange = (e) => {
@@ -50,6 +47,8 @@ function HotelBookingSection() {
 
     const openHotelLocationDropdownModal = () => {
         setHotelLocationHiddenDiv(!hotelLocationHiddenDiv);
+        setHiddenDiv(false);
+        setShowDate(false);
     }
 
     const handleLocationClick = (location) => {
@@ -98,8 +97,8 @@ function HotelBookingSection() {
                             <CiUser className="usericon" />
                             <div>
                                 {`${roomCount > 0 ? `${roomCount} ${roomCount === 1 ? 'Room ' : 'Rooms '}` : ''}`}
-                                {`${adultCount > 0 ? `,${adultCount} ${adultCount === 1 ? 'Adult ' : 'Adults '}` : ''}`}
-                                {`${childCount > 0 ? `,${childCount} ${childCount === 1 ? 'Child' : 'Children'}` : ''}`}
+                                {`${hotelAdultCount > 0 ? `,${hotelAdultCount} ${hotelAdultCount === 1 ? 'Adult ' : 'Adults '}` : ''}`}
+                                {`${hotelChildCount > 0 ? `,${hotelChildCount} ${hotelChildCount === 1 ? 'Child' : 'Children'}` : ''}`}
                             </div>
                         </div>
 
@@ -120,7 +119,7 @@ function HotelBookingSection() {
                                 </div>
                                 <div className='hotel-inc-dec-button'>
                                     <AiOutlineMinusCircle className='main-icons' onClick={() => updateCount('adult', 'decrement')} />
-                                    {adultCount}
+                                    {hotelAdultCount}
                                     <AiOutlinePlusCircle className='main-icons' onClick={() => updateCount('adult', 'increment')} />
                                 </div>
                             </div>
@@ -130,7 +129,7 @@ function HotelBookingSection() {
                                 </div>
                                 <div className='hotel-inc-dec-button'>
                                     <AiOutlineMinusCircle className='main-icons' onClick={() => updateCount('child', 'decrement')} />
-                                    {childCount}
+                                    {hotelChildCount}
                                     <AiOutlinePlusCircle className='main-icons' onClick={() => updateCount('child', 'increment')} />
                                 </div>
                             </div>

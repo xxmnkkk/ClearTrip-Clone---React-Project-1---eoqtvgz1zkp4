@@ -1,14 +1,15 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext , useEffect} from 'react';
 import { RiFlightTakeoffFill } from 'react-icons/ri';
 import { RiArrowLeftRightLine, RiArrowDropUpLine, RiArrowDropDownLine } from 'react-icons/ri';
 import { BsArrowRight } from 'react-icons/bs';
 import { GrFormCheckmark } from 'react-icons/gr';
 import { AiOutlineUser, AiOutlinePlusCircle, AiOutlineMinusCircle } from 'react-icons/ai';
-import { GiAirplaneDeparture, GiAirplaneArrival } from 'react-icons/gi';
+// import { GiAirplaneDeparture, GiAirplaneArrival } from 'react-icons/gi';
 import DateSelector from './DateSelector';
 import { NavLink, Navigate, useNavigate } from 'react-router-dom';
 import { AuthContext } from './App.js';
 import LoginModal from './LoginModal.js';
+import DesAndArr from './DesAndArr.js';
 
 const tripOption = [
     {
@@ -26,28 +27,33 @@ const tripOption = [
 ]
 
 const FlightBookingSection = () => {
-    const [isActive, setIsActive] = useState(false);
-    const [isActivePassanger, setIsActivePassanger] = useState(false);
     const [index, setIndex] = useState(0);
     const [selectedTrip, setSelectedTrip] = useState("oneway");
-    const [selectedOption, setSelectedOption] = useState("oneway");
-    const [adultCount, setAdultCount] = useState(2);
-    const [childCount, setChildCount] = useState(0);
-    const [infantCount, setInfantCount] = useState(0);
-    const [flightClass, setFlightClass] = useState('Economy');
     const [fareType, setFareType] = useState('Regular fare');
 
-    const { isLoggedIn, setIsLoggedIn, setLoginModal, loginModal, departure, arrival, updateDeparture, updateArrival } = useContext(AuthContext);
+    console.log("Selected Trip Option: ", selectedTrip);
+
+    const { isActive, setIsActive , isActivePassanger, setIsActivePassanger , setIsLoggedIn, setLoginModal, loginModal, selectedFlightTrip, setSelectedFlightTrip , flightClass, setFlightClass , adultCount, setAdultCount , childCount, setChildCount , infantCount, setInfantCount , setFlightDepartureHiddenDiv , setFlightArrivalHiddenDiv , setShowDate} = useContext(AuthContext);
+
+    useEffect(() => {
+        setSelectedFlightTrip(selectedTrip);
+    }, [selectedTrip]);
+
+    console.log("Selected Trip Option print 2: ", selectedFlightTrip);
 
     const toggleHiddenTripDiv = () => {
         setIsActive(!isActive);
         setIsActivePassanger(false);
-        console.log("active")
+        console.log("active");
+
+        setFlightDepartureHiddenDiv(false);
+        setFlightArrivalHiddenDiv(false);
+        setShowDate(false);
     }
 
     const handleTripOptionClick = (e) => {
         const newIndex = parseInt(e.currentTarget.getAttribute('data-index'), 10);
-        setSelectedTrip(e.target.value);
+        setSelectedTrip(e.target.textContent);
         setIndex(newIndex);
         setIsActive(false);
     }
@@ -55,6 +61,10 @@ const FlightBookingSection = () => {
     const toggleHiddenPassangerDiv = (e) => {
         setIsActivePassanger(!isActivePassanger);
         setIsActive(false);
+
+        setFlightDepartureHiddenDiv(false);
+        setFlightArrivalHiddenDiv(false);
+        setShowDate(false);
     }
 
     const updateCount = (type, action) => {
@@ -87,16 +97,6 @@ const FlightBookingSection = () => {
         setLoginModal(false);
         setIsLoggedIn(true);
     }
-
-    const handleDepartureInputChange = (e) => {
-        const value = e.target.value;
-        updateDeparture(value);
-    };
-
-    const handleArrivalInputChange = (e) => {
-        const value = e.target.value;
-        updateArrival(value);
-    };
 
     if (loginModal) {
         return <LoginModal onClose={() => setLoginModal(false)} onLoginSuccess={handleLoginSuccess} />
@@ -256,26 +256,7 @@ const FlightBookingSection = () => {
 
             </div>
 
-            <div className='flight-des-arr-div'>
-                <div className='dep-arr departure'>
-                    <GiAirplaneDeparture className='dep-arr-icon' />
-                    <input
-                        placeholder='Where from?'
-                        onChange={handleDepartureInputChange}
-                        value={departure}
-                    />
-                </div>
-                <div className='svg-container'>
-                    <svg width="32" height="32" viewBox="0 0 32 32" fill="none" class="c-pointer"><rect width="32" height="32" rx="16" fill="white"></rect><g clip-path="url(#clip0_160_1650)"><path d="M24.1666 14.8333H7.83325" stroke="#3366CC" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"></path><path d="M7.83325 14.8333L13.6666 9" stroke="#3366CC" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"></path><path d="M7.83342 18.3335H24.1667" stroke="#3366CC" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"></path><path d="M24.1667 18.3334L18.3334 24.1667" stroke="#3366CC" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"></path><circle cx="16" cy="16" r="13.375" stroke="#3366CC" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"></circle></g><defs><clipPath id="clip0_160_1650"><rect width="28" height="28" fill="white" transform="translate(2 2)"></rect></clipPath></defs></svg>
-                </div>
-                <div className='dep-arr arrival'>
-                    <GiAirplaneArrival className='dep-arr-icon arr-icon' />
-                    <input placeholder='Where to?'
-                        onChange={handleArrivalInputChange}
-                        value={arrival}
-                    />
-                </div>
-            </div>
+            < DesAndArr />
 
             <div className='date-selector-and-search-div'>
                 <DateSelector />
