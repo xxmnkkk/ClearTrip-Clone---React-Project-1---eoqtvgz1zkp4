@@ -1,8 +1,14 @@
+import { useContext } from "react";
 import { AiOutlineClose } from "react-icons/ai";
 import { GiWitchFlight } from 'react-icons/gi'
 import { NavLink } from "react-router-dom";
+import { AuthContext } from "./App";
 
 export default function Profile({ onClose, onLogout }) {
+
+    // const {loggedInUserName} = useContext(AuthContext);
+    const userName = sessionStorage.getItem('loggedInUserName');
+    // console.log("loggedin use name: ", loggedInUserName);
 
     const handleLogout = () => {
         sessionStorage.removeItem("userToken");
@@ -20,7 +26,7 @@ export default function Profile({ onClose, onLogout }) {
                     <AiOutlineClose onClick={onClose} className="icon" />
                 </div>
                 <div className="user-details">
-                    <div>Welcome { }</div>
+                    <div>Welcome <span>{userName.toUpperCase()}</span></div>
                 </div>
                 <NavLink to="/mytrip" className="mytrip-navlink" onClick={onClose}>
                     <div className="my-trip">

@@ -1,4 +1,4 @@
-import React, {useState , useContext} from "react";
+import React, { useState, useContext } from "react";
 import { GiAirplaneDeparture, GiAirplaneArrival } from 'react-icons/gi';
 import { AuthContext } from "./App";
 
@@ -14,14 +14,17 @@ const airports = [
 
 export default function DesAndArr() {
 
-    const { departure, arrival, updateDeparture, updateArrival , flightDepartureHiddenDiv, setFlightDepartureHiddenDiv , flightArrivalHiddenDiv, setFlightArrivalHiddenDiv , setIsActive , setIsActivePassanger , setShowDate} = useContext(AuthContext);
+    const { departure, arrival, updateDeparture, updateArrival, flightDepartureHiddenDiv, setFlightDepartureHiddenDiv, flightArrivalHiddenDiv, setFlightArrivalHiddenDiv, setIsActive, setIsActivePassanger, setShowDate } = useContext(AuthContext);
 
-    const handleDepartureInputChange = (e) => {
+    // const departureInputRef = useRef();
+    // const arrivalInputRef = useRef();
+
+    const handleDepartureInputChange = () => {
         const value = e.target.value;
         updateDeparture(value);
     };
 
-    const handleArrivalInputChange = (e) => {
+    const handleArrivalInputChange = () => {
         const value = e.target.value;
         updateArrival(value);
     };
@@ -59,11 +62,13 @@ export default function DesAndArr() {
     const HandleDepartureHiddenDivClick = (e) => {
         const airportCode = e.currentTarget.getAttribute('data-airport-code');
         updateDeparture(airportCode);
+        setFlightDepartureHiddenDiv(false);
     };
 
     const HandleArrivalHiddenDivClick = (e) => {
         const airportCode = e.currentTarget.getAttribute('data-airport-code');
         updateArrival(airportCode);
+        setFlightArrivalHiddenDiv(false);
     };
 
     return (

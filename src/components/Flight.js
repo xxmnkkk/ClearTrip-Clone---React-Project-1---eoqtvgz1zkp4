@@ -1,5 +1,5 @@
 import axios from "axios"
-import { useContext, useEffect, useState , useRef} from "react";
+import { useContext, useEffect, useState, useRef } from "react";
 import { AuthContext } from "./App";
 import DesAndArr from "./DesAndArr";
 import DateSelector from "./DateSelector";
@@ -10,12 +10,12 @@ import { useNavigate } from "react-router-dom";
 
 
 export default function Flight() {
-    const {startDay , endDay , startDate, endDate, isLoggedIn, setLoginModal, departure, arrival, flightDay, flightDayTwo, selectedFlightTrip, selectedFlightData, setSelectedFlightData } = useContext(AuthContext);
+    const { startDay, endDay, startDate, endDate, isLoggedIn, setLoginModal, departure, arrival, flightDay, flightDayTwo, selectedFlightTrip, selectedFlightData, setSelectedFlightData } = useContext(AuthContext);
 
-    console.log("start date: ",startDate );
-    console.log("end date: ", endDate);
-    console.log("day: ", flightDay);
-    console.log("day2: ", flightDayTwo);
+    // console.log("start date: ",startDate );
+    // console.log("end date: ", endDate);
+    // console.log("day: ", flightDay);
+    // console.log("day2: ", flightDayTwo);
 
     const navigate = useNavigate();
     const selectedFlightDivRef = useRef(null);
@@ -35,14 +35,24 @@ export default function Flight() {
     const [selectedToFlights, setSelectedToFlights] = useState([]);
     const [selectedBackFlights, setSelectedBackFlights] = useState([]);
     const [selectedStopsFilter, setSelectedStopsFilter] = useState(null);
+    const [priceFilter, setPriceFilter] = useState({ min: null, max: null });
 
-    console.log("Selected flight data: ", selectedFlightData);
+    const [selectedSort, setSelectedSort] = useState(null);
 
-    console.log("Flight Data: ", flights.data.flights);
-    console.log("Flight Data Two: ", flightsTwo.data.flights);
+
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState(null);
+
+    // console.log("Selected flight data: ", selectedFlightData);
+
+    // console.log("Flight Data: ", flights.data.flights);
+    // console.log("Flight Data Two: ", flightsTwo.data.flights);
 
     if (selectedFlightTrip === "oneway" || selectedFlightTrip === "One way") {
         useEffect(() => {
+            setLoading(true);
+            setError(null);
+
             const queryParams = {
                 source: departure,
                 destination: arrival,
@@ -63,10 +73,17 @@ export default function Flight() {
                 })
                 .catch((error) => {
                     console.log(error);
+                    setError(error.message);
                 })
+                .finally(() => {
+                    setLoading(false);
+                });
         }, [departure, arrival, flightDay]);
     } else {
         useEffect(() => {
+            setLoading(true);
+            setError(null);
+
             const queryParams = {
                 source: departure,
                 destination: arrival,
@@ -87,11 +104,18 @@ export default function Flight() {
                 })
                 .catch((error) => {
                     console.log(error);
+                    setError(error.message);
                 })
+                .finally(() => {
+                    setLoading(false);
+                });
         }, [departure, arrival, flightDay]);
 
 
         useEffect(() => {
+            setLoading(true);
+            setError(null);
+
             const queryParams = {
                 source: arrival,
                 destination: departure,
@@ -112,8 +136,20 @@ export default function Flight() {
                 })
                 .catch((error) => {
                     console.log(error);
+                    setError(error.message);
                 })
+                .finally(() => {
+                    setLoading(false);
+                });
         }, [departure, arrival, flightDayTwo]);
+    }
+
+    if (loading) {
+        return <div className="api-loading"></div>;
+    }
+
+    if (error) {
+        return <div className="api-error">{error}</div>;
     }
 
     const flightData = flights.data.flights;
@@ -153,19 +189,44 @@ export default function Flight() {
 
     const handleStopsChange = (event) => {
         setSelectedStopsFilter(event.target.value);
+        setPriceFilter({ min: null, max: null });
     };
 
     const filteredFlightData = flightData.filter((flight) => {
         return (
-            (!selectedStopsFilter || flight.stops === parseInt(selectedStopsFilter))
+            (!selectedStopsFilter || flight.stops === parseInt(selectedStopsFilter)) &&
+            (!priceFilter.min || flight.ticketPrice >= priceFilter.min) &&
+            (!priceFilter.max || flight.ticketPrice <= priceFilter.max)
         );
     });
 
     const filteredFlightDataTwo = flightDataTwo.filter((flight) => {
         return (
-            (!selectedStopsFilter || flight.stops === parseInt(selectedStopsFilter))
+            (!selectedStopsFilter || flight.stops === parseInt(selectedStopsFilter)) &&
+            (!priceFilter.min || flight.ticketPrice >= priceFilter.min) &&
+            (!priceFilter.max || flight.ticketPrice <= priceFilter.max)
         );
     });
+
+    const handleSortChange = (event) => {
+        setSelectedSort(event.target.value);
+    };
+
+    const sortedFlightData = [...filteredFlightData];
+    const sortedFlightDataTwo = [...filteredFlightDataTwo];
+
+    if (selectedSort === 'lowToHigh') {
+        sortedFlightData.sort((a, b) => a.ticketPrice - b.ticketPrice);
+        sortedFlightDataTwo.sort((a, b) => a.ticketPrice - b.ticketPrice);
+    } else if (selectedSort === 'highToLow') {
+        sortedFlightData.sort((a, b) => b.ticketPrice - a.ticketPrice);
+        sortedFlightDataTwo.sort((a, b) => b.ticketPrice - a.ticketPrice);
+    }
+
+    const displayedFlightData = selectedSort ? sortedFlightData : filteredFlightData;
+    const displayedFlightDataTwo = selectedSort ? sortedFlightDataTwo : filteredFlightDataTwo;
+
+
 
     return <>
         <div className="flight-container" ref={selectedFlightDivRef}>
@@ -203,6 +264,23 @@ export default function Flight() {
                             </div>
 
                         </div>
+
+                        <h2>Sort By Price</h2>
+                        <div className="sort-checkboxes">
+                            <label>
+                                <input type="radio" name="price-checkbox" value="default" checked={!selectedSort} onChange={handleSortChange} />
+                                Default
+                            </label>
+                            <label>
+                                <input type="radio" name="price-checkbox" value="lowToHigh" checked={selectedSort === 'lowToHigh'} onChange={handleSortChange} />
+                                Low to High
+                            </label>
+                            <label>
+                                <input type="radio" name="price-checkbox" value="highToLow" checked={selectedSort === 'highToLow'} onChange={handleSortChange} />
+                                High to Low
+                            </label>
+                        </div>
+
                     </div>
                 </div>
 
@@ -245,6 +323,7 @@ export default function Flight() {
                                 ))}
                             </div>
                         }
+
 
                         {selectedBackFlights.length > 0 &&
                             <div className="selected-flight-from">
@@ -290,7 +369,7 @@ export default function Flight() {
                     </div>
 
                     <h1 className="flight-heading">{departure} <FaArrowRightLong /> {arrival}</h1>
-                    {filteredFlightData.map((flight, index) => (
+                    {displayedFlightData.map((flight, index) => (
                         <div className="flightinfo-container" key={index}>
                             <div className="flight-name-container">
                                 <img src="https://seeklogo.com/images/I/indigo-logo-EDBB4B3C09-seeklogo.com.png" />
@@ -331,7 +410,7 @@ export default function Flight() {
                     {selectedFlightTrip === "Round trip" &&
                         <>
                             <h1 className="flight-heading">{arrival} <FaArrowRightLong /> {departure}</h1>
-                            {filteredFlightDataTwo.map((flight, index) => (
+                            {displayedFlightDataTwo.map((flight, index) => (
                                 <div className="flightinfo-container" key={index}>
                                     <div className="flight-name-container">
                                         <img src="https://seeklogo.com/images/I/indigo-logo-EDBB4B3C09-seeklogo.com.png" />
@@ -364,8 +443,12 @@ export default function Flight() {
                                     </div>
                                 </div>
                             ))}
+
+
                         </>
                     }
+                    {/* {loading && <p className="api-loading"></p>}
+                    {error && <p className="api-error">{error}</p>} */}
                 </div>
             </div>
         </div>

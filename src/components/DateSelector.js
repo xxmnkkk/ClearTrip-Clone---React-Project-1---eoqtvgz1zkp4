@@ -15,7 +15,7 @@ const DateSelector = () => {
         },
     ]);
 
-    const { showDate, setShowDate , flightDay, setFlightDay, flightDayTwo, setFlightDayTwo , setCalenderDateDifference , setStartDate , setEndDate , setIsActive , setIsActivePassanger , setFlightDepartureHiddenDiv , setFlightArrivalHiddenDiv , setHiddenDiv , setHotelLocationHiddenDiv} = useContext(AuthContext);
+    const { showDate, setShowDate, flightDay, setFlightDay, flightDayTwo, setFlightDayTwo, setCalenderDateDifference, setStartDate, setEndDate, setIsActive, setIsActivePassanger, setFlightDepartureHiddenDiv, setFlightArrivalHiddenDiv, setHiddenDiv, setHotelLocationHiddenDiv } = useContext(AuthContext);
 
     const startDate = format(date[0].startDate, 'dd-MM-yyyy');
     const endDate = format(date[0].endDate, 'dd-MM-yyyy');
@@ -26,13 +26,13 @@ const DateSelector = () => {
     setStartDate(startDate);
     setEndDate(endDate);
 
-    console.log("start date: ",startDate );
-    console.log("end date: ", endDate);
-    console.log("day: ", flightDay);
-    console.log("day2: ", flightDayTwo);
+    // console.log("start date: ", startDate);
+    // console.log("end date: ", endDate);
+    // console.log("day: ", flightDay);
+    // console.log("day2: ", flightDayTwo);
 
-    const startDateTimestamp = date[0].startDate.getTime(); 
-    const endDateTimestamp = date[0].endDate.getTime();     
+    const startDateTimestamp = date[0].startDate.getTime();
+    const endDateTimestamp = date[0].endDate.getTime();
 
     const timeDifferenceInMilliseconds = endDateTimestamp - startDateTimestamp;
     const timeDifferenceInSeconds = timeDifferenceInMilliseconds / 1000;
@@ -42,9 +42,9 @@ const DateSelector = () => {
 
     setCalenderDateDifference(timeDifferenceInDays);
 
-    console.log("Start day: ", flightDay);
-    console.log("Start date: ", startDate, "end date: ", endDate);
-    console.log("Date time difference: ", timeDifferenceInDays);
+    // console.log("Start day: ", flightDay);
+    // console.log("Start date: ", startDate, "end date: ", endDate);
+    // console.log("Date time difference: ", timeDifferenceInDays);
 
     const handleDateClick = () => {
         setShowDate(!showDate);
@@ -70,11 +70,13 @@ const DateSelector = () => {
             {showDate && <div>
                 <DateRange
                     editableDateInputs={true}
-                    onChange={item => setDate([item.selection])}
-                    moveRangeOnFirstSelection={false}
-                    ranges={date}
-                    minDate={new Date()}
-                    className="rdrDateRangeWrapper"
+                    onChange={(item) => {
+                        setDate([item.selection]);
+                    }}
+                moveRangeOnFirstSelection={false}
+                ranges={date}
+                minDate={new Date()}
+                className="rdrDateRangeWrapper"
                 />
             </div>}
         </div>

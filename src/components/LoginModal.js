@@ -1,9 +1,14 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { AiOutlineClose } from "react-icons/ai";
 import axios from 'axios';
+import { AuthContext } from './App';
 
 const LoginModal = ({ onClose , onLoginSuccess }) => {
+    // const {loggedInUserName,setLoggedInUserName} = useContext(AuthContext);
+
     const [activeForm, setActiveForm] = useState('sign-in');
+    const [loginError, setLoginError] = useState('');
+    const [signupError, setSignupError] = useState('');
 
     const [loginDetails, setLoginDetails] = useState({
         email: '',
@@ -55,9 +60,16 @@ const LoginModal = ({ onClose , onLoginSuccess }) => {
                 localStorage.setItem(`userDetails_${loginDetails.email}`, JSON.stringify(loginDetails)); // Store login details
                 onLoginSuccess();
             }
+
+            if(response.data.data.name){
+                // setLoggedInUserName(response.data.data.name)
+                sessionStorage.setItem('loggedInUserName', response.data.data.name)
+                console.log("logged in user name in login component: ", response.data.data.name);
+            }
         })
         .catch((error) => {
             console.log(error)
+            setLoginError(error.response.data.message)
         })
     };
 
@@ -84,6 +96,7 @@ const LoginModal = ({ onClose , onLoginSuccess }) => {
         })
         .catch((error) => {
             console.log(error);
+            setSignupError(error.response.data.message)
         })
     };
 
@@ -118,6 +131,8 @@ const LoginModal = ({ onClose , onLoginSuccess }) => {
                         <div className='login-password-div'>password: <input type='password' name='password' value={loginDetails.password} onChange={handleLoginInput} /></div>
                         <div className='signin-button-div'><button onClick={handleLogin}>Sign in</button></div>
                         <p>New user? <span onClick={() => toggleForm('sign-up')}>Sign up now</span></p>
+
+                        <div className='error-div-loginandsignup'>{loginError}</div>
                     </div>
                 ) : (
                     <div className='sign-up-div'>
@@ -127,6 +142,8 @@ const LoginModal = ({ onClose , onLoginSuccess }) => {
                         <div className='login-password-div'>password: <input type='password' name='password' value={signupDetails.password} onChange={handleSignupInput} /></div>
                         <div className='signin-button-div'><button onClick={handleSignup}>Sign up</button></div>
                         <p>Already a user? <span onClick={() => toggleForm('sign-in')}>Sign in now</span></p>
+
+                        <div className='error-div-loginandsignup'>{signupError}</div>
                     </div>
                 )}
 

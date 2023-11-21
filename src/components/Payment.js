@@ -7,10 +7,14 @@ import { MdOutlineHotelClass, MdOutlineMeetingRoom } from "react-icons/md";
 import { FaArrowRightLong } from "react-icons/fa6";
 import { MdOutlinePeople } from "react-icons/md";
 import { RiFlightLandLine, RiFlightTakeoffFill } from "react-icons/ri";
+import { useNavigate } from "react-router-dom";
 
 
 export default function Payment() {
-    const { selectedHotelData, selectedRoom, roomCount, calenderDateDifference, selectedFlightData, startDate, endDate, flightDay, flightDayTwo, adultCount, childCount, infantCount, hotelAdultCount, hotelChildCount } = useContext(AuthContext);
+    const { selectedHotelData, selectedRoom, roomCount, calenderDateDifference, selectedFlightData, startDate, endDate, flightDay, flightDayTwo, adultCount, childCount, infantCount, hotelAdultCount, hotelChildCount} = useContext(AuthContext);
+
+    const navigate = useNavigate();
+
     console.log("start date: ", startDate);
     console.log("end date: ", endDate);
     console.log("day: ", flightDay);
@@ -22,21 +26,23 @@ export default function Payment() {
     const [netDiv, setNetDiv] = useState(false);
     const [upiDiv, setUpiDiv] = useState(false);
 
+    const [paymentError, setPaymentError] = useState('');
+    const [agreedToTerms, setAgreedToTerms] = useState(false);
 
     useEffect(() => {
         const token = sessionStorage.getItem('userToken');
         console.log(token);
 
-        const bookingPayload = {};
+        const Body = {};
 
         if (selectedFlightData && selectedFlightData.length > 0) {
-            bookingPayload.bookingType = 'flight';
-            bookingPayload.requiredField = JSON.stringify(selectedFlightData);
+            Body.bookingType = 'flight';
+            Body.requiredField = selectedFlightData;
         }
 
         if (selectedHotelData) {
-            bookingPayload.bookingType = 'hotel';
-            bookingPayload.requiredField = JSON.stringify(selectedHotelData);
+            Body.bookingType = 'hotel';
+            Body.requiredField = selectedHotelData;
         }
 
         const config = {
@@ -46,7 +52,7 @@ export default function Payment() {
             }
         }
 
-        axios.post('https://academics.newtonschool.co/api/v1/bookingportals/booking', bookingPayload, config)
+        axios.post('https://academics.newtonschool.co/api/v1/bookingportals/booking', Body, config)
             .then(response => {
                 console.log('Response:', response.data);
             })
@@ -58,11 +64,14 @@ export default function Payment() {
                 }
             });
     }, [selectedFlightData, selectedHotelData]);
+
     const handleCreditDiv = () => {
         setCreditDiv(true);
         setDebitDiv(false);
         setNetDiv(false);
         setUpiDiv(false);
+
+        setPaymentError('');
     }
 
     const handleDebitDiv = () => {
@@ -70,6 +79,8 @@ export default function Payment() {
         setCreditDiv(false);
         setNetDiv(false);
         setUpiDiv(false);
+
+        setPaymentError('');
     }
 
     const handleNetDiv = () => {
@@ -78,6 +89,7 @@ export default function Payment() {
         setDebitDiv(false);
         setUpiDiv(false);
 
+        setPaymentError('');
     }
 
     const handleUpiDiv = () => {
@@ -85,95 +97,74 @@ export default function Payment() {
         setCreditDiv(false);
         setDebitDiv(false);
         setNetDiv(false);
+
+        setPaymentError('');
     }
 
-    const [cardDetails, setCardDetails] = useState({
-        cardNumber: '',
-        cvv: '',
-        expDate: '',
-        cardHolderName: '',
-    });
-
-    const [netBankingDetails, setNetBankingDetails] = useState({
-        userId: '',
-        password: '',
-    });
-
-    const [upiDetails, setUpiDetails] = useState({
-        upiId: '',
-    });
-
-    const [checkboxChecked, setCheckboxChecked] = useState(false);
-
-    const [paymentError, setPaymentError] = useState('');
-
-    const handleInputChange = (e, paymentType) => {
-        switch (paymentType) {
-            case 'credit':
-            case 'debit':
-                setCardDetails({
-                    ...cardDetails,
-                    [e.target.name]: e.target.value,
-                });
-                break;
-            case 'net':
-                setNetBankingDetails({
-                    ...netBankingDetails,
-                    [e.target.name]: e.target.value,
-                });
-                break;
-            case 'upi':
-                setUpiDetails({
-                    ...upiDetails,
-                    [e.target.name]: e.target.value,
-                });
-                break;
-            default:
-                break;
-        }
-    };
-
-    const handleCheckboxChange = (e) => {
-        setCheckboxChecked(e.target.checked);
-    };
-
     const handlePayNow = () => {
-        if (!checkboxChecked) {
-            setPaymentError('Please accept the terms and conditions.');
+        if (!agreedToTerms) {
+            setPaymentError('Please agree to the terms and conditions.');
             return;
         }
 
-        switch (true) {
-            case creditDiv:
-                if (!cardDetails.cardNumber || !cardDetails.cvv || !cardDetails.expDate || !cardDetails.cardHolderName) {
-                    setPaymentError('Please fill in all credit card details.');
-                    return;
-                }
-                break;
-            case debitDiv:
-                if (!cardDetails.cardNumber || !cardDetails.cvv || !cardDetails.expDate || !cardDetails.cardHolderName) {
-                    setPaymentError('Please fill in all debit card details.');
-                    return;
-                }
-                break;
-            case netDiv:
-                if (!netBankingDetails.userId || !netBankingDetails.password) {
-                    setPaymentError('Please fill in all net banking details.');
-                    return;
-                }
-                break;
-            case upiDiv:
-                if (!upiDetails.upiId) {
-                    setPaymentError('Please fill in the UPI ID.');
-                    return;
-                }
-                break;
-            default:
-                break;
+        if (upiDiv) {
+            const upiIdInput = document.querySelector('input[name="upiId"]');
+            if (upiIdInput.value === '') {
+                setPaymentError('Please enter your UPI ID to complete the payment.');
+            }else{
+                console.log("Setting showSuccessModal to true...");
+                navigate("/payment/success");
+            }
+        } 
+
+        if(debitDiv){
+            const debitNumberInputs = document.querySelector('input[name="debitNumberInput"]');
+            const debitCvvInputs = document.querySelector('input[name="debitCvvInput"]');
+            const debitDateInputs = document.querySelector('input[name="debitDateInput"]');
+            const debitNameInputs = document.querySelector('input[name="debitNameInput"]');
+
+            if(debitNumberInputs.value === '' ||
+            debitCvvInputs.value === '' ||
+            debitDateInputs.value === '' ||
+            debitNameInputs.value === ''
+            ){
+                setPaymentError('Please enter your debit card details to complete the payment.');
+            }else{
+                console.log("Setting showSuccessModal to true...");
+                navigate("/payment/success");
+            }
         }
 
-        setPaymentError('Success');
-    };
+        if(creditDiv){
+            const creditNumberInputs = document.querySelector('input[name="creditNumberInput"]');
+            const creditCvvInputs = document.querySelector('input[name="creditCvvInput"]');
+            const creditDateInputs = document.querySelector('input[name="creditDateInput"]');
+            const creditNameInputs = document.querySelector('input[name="creditNameInput"]');
+
+            if(creditNumberInputs.value === '' ||
+            creditCvvInputs.value === '' ||
+            creditDateInputs.value === '' ||
+            creditNameInputs.value === ''
+            ){
+                setPaymentError('Please enter your credit card details to complete the payment.');
+            }else{
+                console.log("Setting showSuccessModal to true...");
+                navigate("/payment/success");
+            }
+        }
+
+        if (netDiv) {
+            const nameInput = document.querySelector('input[name="netname"]');
+            const passwordInput = document.querySelector('input[name="netpassword"]');
+
+            if (nameInput.value === '' || passwordInput.value === '') {
+                setPaymentError('Please enter your net banking details to complete the payment.');
+            }else{
+                console.log("Setting showSuccessModal to true...");
+                navigate("/payment/success");
+            }
+        } 
+    }
 
     return (
         <div className="payment-container">
@@ -199,21 +190,21 @@ export default function Payment() {
                                     <h2>Please enter your card details to complete your booking</h2>
                                     <label>
                                         Credit card number
-                                        <input className="input-one" type="text" placeholder="1234 4567 8912 3456" />
+                                        <input className="input-one" type="text" maxLength="19" name="creditNumberInput" placeholder="1234 4567 8912 3456" />
                                     </label>
                                     <div>
                                         <label>
                                             Cvv
-                                            <input type="text" placeholder="123" />
+                                            <input type="text" maxLength="3" name="creditCvvInput" placeholder="123" />
                                         </label>
                                         <label>
                                             Exp date
-                                            <input type="text" placeholder="12/1234" />
+                                            <input type="text" name="creditDateInput" maxLength="7" placeholder="12/1234" />
                                         </label>
                                     </div>
                                     <label>
                                         Cardholder name
-                                        <input type="text" placeholder="Post Malone" />
+                                        <input type="text" name="creditNameInput" placeholder="Post Malone" />
                                     </label>
 
                                     <div className="payment-error-div">{paymentError}</div>
@@ -225,21 +216,21 @@ export default function Payment() {
                                     <h2>Please enter your card details to complete your booking</h2>
                                     <label>
                                         Debit card number
-                                        <input className="input-one" type="text" placeholder="1234 4567 8912 3456" />
+                                        <input className="input-one" type="text" maxLength="19" name="debitNumberInput" placeholder="1234 4567 8912 3456" />
                                     </label>
                                     <div>
                                         <label>
                                             Cvv
-                                            <input type="text" placeholder="123" />
+                                            <input type="text" name="debitCvvInput" maxLength="3" placeholder="123" />
                                         </label>
                                         <label>
                                             Exp date
-                                            <input type="text" placeholder="12/1234" />
+                                            <input type="text" name="debitDateInput" maxLength="7" placeholder="12/1234" />
                                         </label>
                                     </div>
                                     <label>
                                         Cardholder name
-                                        <input type="text" placeholder="Post Malone" />
+                                        <input type="text" name="debitNameInput" placeholder="Post Malone" />
                                     </label>
 
                                     <div className="payment-error-div">{paymentError}</div>
@@ -251,11 +242,11 @@ export default function Payment() {
                                     <h2>Please enter your netbanking account id and password to pay for your booking</h2>
                                     <label>
                                         User Id
-                                        <input type="number" placeholder="user Id" />
+                                        <input type="number" name="netname" maxLength="10" placeholder="user Id" />
                                     </label>
                                     <label>
                                         Password
-                                        <input type="password" placeholder="password" />
+                                        <input type="password" name="netpassword" placeholder="password" />
                                     </label>
 
                                     <div className="payment-error-div">{paymentError}</div>
@@ -266,7 +257,7 @@ export default function Payment() {
                                 <div className="payment-upi-container">
                                     <div className="upi-id-container">
                                         Enter UPI ID
-                                        <input type="text" name="upiId" placeholder="Enter your UPI ID" onClick={handleInputChange}/>
+                                        <input type="text" name="upiId" placeholder="Enter your UPI ID" />
                                         <p>Payment request will be sent to the phone number linked to your upi account</p>
                                         <span className="payment-error-div">{paymentError}</span>
                                     </div>
@@ -293,7 +284,7 @@ export default function Payment() {
 
                     <div className="payment-paynow">
                         <div className="payment-terms">
-                            <input type="checkbox" onClick={handleCheckboxChange}/>
+                            <input type="checkbox" onClick={() => setAgreedToTerms(!agreedToTerms)} />
                             <p>I understand and agree to the rules and restrictions of this fare, the <span>booking policy</span>, the <span>privacy policy</span> and the <span>terms and conditions</span> of Cleartrip and confirm all the entered details are correct</p>
                         </div>
                         <div className="payment-paynow-total-container">

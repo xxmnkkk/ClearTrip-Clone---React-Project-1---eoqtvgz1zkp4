@@ -1,4 +1,4 @@
-import React, { useState, useContext , useEffect} from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { RiFlightTakeoffFill } from 'react-icons/ri';
 import { RiArrowLeftRightLine, RiArrowDropUpLine, RiArrowDropDownLine } from 'react-icons/ri';
 import { BsArrowRight } from 'react-icons/bs';
@@ -29,11 +29,10 @@ const tripOption = [
 const FlightBookingSection = () => {
     const [index, setIndex] = useState(0);
     const [selectedTrip, setSelectedTrip] = useState("oneway");
-    const [fareType, setFareType] = useState('Regular fare');
 
     console.log("Selected Trip Option: ", selectedTrip);
 
-    const { isActive, setIsActive , isActivePassanger, setIsActivePassanger , setIsLoggedIn, setLoginModal, loginModal, selectedFlightTrip, setSelectedFlightTrip , flightClass, setFlightClass , adultCount, setAdultCount , childCount, setChildCount , infantCount, setInfantCount , setFlightDepartureHiddenDiv , setFlightArrivalHiddenDiv , setShowDate} = useContext(AuthContext);
+    const { isActive, setIsActive, isActivePassanger, setIsActivePassanger, setIsLoggedIn, setLoginModal, loginModal, selectedFlightTrip, setSelectedFlightTrip, flightClass, setFlightClass, adultCount, setAdultCount, childCount, setChildCount, infantCount, setInfantCount, setFlightDepartureHiddenDiv, setFlightArrivalHiddenDiv, setShowDate , fareType, setFareType} = useContext(AuthContext);
 
     useEffect(() => {
         setSelectedFlightTrip(selectedTrip);

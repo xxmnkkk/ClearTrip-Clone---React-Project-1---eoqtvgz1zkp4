@@ -1,28 +1,31 @@
 import React, { useContext, useState } from "react";
 import { AuthContext } from "./App";
 import { TbCircleNumber1, TbCircleNumber2, TbCircleNumber3, TbCircleNumber4 } from "react-icons/tb";
-import { MdOutlineMeetingRoom } from "react-icons/md";
+import { MdOutlineMeetingRoom, MdLuggage, MdFreeCancellation, MdOutlineAirlineSeatReclineExtra } from "react-icons/md";
 import { LiaBedSolid } from "react-icons/lia";
-import { IoPricetagsOutline } from "react-icons/io5";
-import { FaArrowRightLong } from "react-icons/fa6";
+import { IoPricetagsOutline, IoBagHandleOutline, IoFastFoodOutline } from "react-icons/io5";
+import { FaArrowRightLong, FaChevronRight } from "react-icons/fa6";
 import { IoEllipsisVerticalOutline } from "react-icons/io5";
 import { GrLocationPin } from "react-icons/gr";
 import { useNavigate } from "react-router-dom";
+import { RiFlightLandLine, RiFlightTakeoffFill } from "react-icons/ri";
+import { SlCalender } from "react-icons/sl";
+import { GiReturnArrow } from "react-icons/gi";
 
 
 
 
 export default function Checkout() {
-    const { selectedRoom, selectedHotelData, selectedFlightData, roomCount, calenderDateDifference, startDate, endDate, flightDay, flightDayTwo, flightClass, adultCount, childCount, infantCount, hotelAdultCount, hotelChildCount } = useContext(AuthContext);
+    const { selectedRoom, selectedHotelData, selectedFlightData, roomCount, calenderDateDifference, startDate, endDate, flightDay, flightDayTwo, flightClass, adultCount, childCount, infantCount, hotelAdultCount, hotelChildCount, fareType } = useContext(AuthContext);
 
-    console.log("start date: ",startDate );
-    console.log("end date: ", endDate);
-    console.log("day: ", flightDay);
-    console.log("day2: ", flightDayTwo);
+    // console.log("start date: ",startDate );
+    // console.log("end date: ", endDate);
+    // console.log("day: ", flightDay);
+    // console.log("day2: ", flightDayTwo);
 
     const getEmptyPassenger = () => {
         return {
-            gender: "",
+            gender: "Mr.",
             firstName: "",
             lastName: ""
         };
@@ -35,13 +38,17 @@ export default function Checkout() {
     const [termsChecked, setTermsChecked] = useState(false);
     const [error, setError] = useState("");
 
+    const [cancellationDiv, setCancellationDiv] = useState(false);
+    const [flightFareTo, setFlightFareTo] = useState(false);
+    const [flightFareBack, setFlightFareBack] = useState(false);
+
     const navigate = useNavigate();
 
-    console.log(selectedRoom);
-    console.log(selectedHotelData);
+    // console.log(selectedRoom);
+    // console.log(selectedHotelData);
 
-    console.log("hotel passanger details: ", hotelPassengerDetails);
-    console.log("flight passanger details: ", flightPassengerDetails);
+    // console.log("hotel passanger details: ", hotelPassengerDetails);
+    // console.log("flight passanger details: ", flightPassengerDetails);
     // console.log("flight length: ", selectedFlightData.length);
     console.log("Selected flight data: ", selectedFlightData);
 
@@ -57,12 +64,12 @@ export default function Checkout() {
 
     const hasEmptyField = (passenger) => {
         const fieldsToExclude = ['gender'];
-    
+
         return Object.keys(passenger).some(
             (field) => !fieldsToExclude.includes(field) && passenger[field].trim() === ""
         );
     };
-    
+
 
     const validateForm = () => {
         if (
@@ -140,46 +147,91 @@ export default function Checkout() {
 
                 <div className="checkout-flight-break">
                     {selectedFlightData && selectedFlightData.length === 1 &&
-                        <div className="checkout-flight-card">
-                            <div className="checkout-flight-srcdes-date-container">
-                                <p>{selectedFlightData[0].source} <FaArrowRightLong /> {selectedFlightData[0].destination} <span>{flightDay}, {startDate}</span></p>
+                        <>
+                            <div className="checkout-flight-card">
+                                <div className="checkout-flight-srcdes-date-container">
+                                    <p>{selectedFlightData[0].source} <FaArrowRightLong /> {selectedFlightData[0].destination} <span>{flightDay}, {startDate}</span></p>
+                                </div>
+                                <div className="checkout-flight-info-container">
+                                    <div className="checkout-flight-name-section">
+                                        <img src="https://seeklogo.com/images/I/indigo-logo-EDBB4B3C09-seeklogo.com.png" />
+                                        <div className="checkout-flight-name-info">
+                                            <span><strong>IndiGo</strong></span>
+                                            <span>{selectedFlightData[0].flightID}</span>
+                                            <span>{flightClass}</span>
+                                        </div>
+                                    </div>
+
+                                    <div className="checkout-flight-dotted-line">
+                                        <GrLocationPin />
+                                        <IoEllipsisVerticalOutline />
+                                        <IoEllipsisVerticalOutline />
+                                        <IoEllipsisVerticalOutline />
+                                        <IoEllipsisVerticalOutline />
+                                        <GrLocationPin className="checkout-inverted" />
+                                    </div>
+
+                                    <div className="checkout-flight-time-container">
+                                        <div>
+                                            <p><strong>{selectedFlightData[0].departureTime}</strong> {selectedFlightData[0].source}</p>
+                                        </div>
+                                        <div>
+                                            <p>{selectedFlightData[0].duration} hr</p>
+                                        </div>
+                                        <div>
+                                            <p><strong>{selectedFlightData[0].arrivalTime}</strong> {selectedFlightData[0].destination}</p>
+                                        </div>
+                                    </div>
+
+                                    <div className="checkout-flight-price">
+                                        ₹ {selectedFlightData[0].ticketPrice}
+                                    </div>
+                                </div>
                             </div>
-                            <div className="checkout-flight-info-container">
-                                <div className="checkout-flight-name-section">
-                                    <img src="https://seeklogo.com/images/I/indigo-logo-EDBB4B3C09-seeklogo.com.png" />
-                                    <div className="checkout-flight-name-info">
-                                        <span><strong>IndiGo</strong></span>
-                                        <span>{selectedFlightData[0].flightID}</span>
-                                        <span>{flightClass}</span>
-                                    </div>
-                                </div>
 
-                                <div className="checkout-flight-dotted-line">
-                                    <GrLocationPin />
-                                    <IoEllipsisVerticalOutline />
-                                    <IoEllipsisVerticalOutline />
-                                    <IoEllipsisVerticalOutline />
-                                    <IoEllipsisVerticalOutline />
-                                    <GrLocationPin className="checkout-inverted" />
+                            <div className="selected-flight-fare-section">
+                                <div className="flight-fare-heading">
+                                    <RiFlightTakeoffFill /> {selectedFlightData[0].source} <FaArrowRightLong /> {selectedFlightData[0].destination} : {fareType}
                                 </div>
+                                <div className="flight-fare-content">
+                                    <div className="flight-fare-info">
+                                        <span><SlCalender /> Date change allowed from ₹ {selectedFlightData[0].ticketPrice / 4}</span>
+                                        <span><IoBagHandleOutline /> Cabin/person: 7kg</span>
+                                        <span><MdLuggage /> Check-in/person: 15kg(1 piece)</span>
+                                        <span><MdFreeCancellation /> Cancellation fee starts from ₹ 1999</span>
+                                        <span><IoFastFoodOutline /> Paid meal</span>
+                                        <span><MdOutlineAirlineSeatReclineExtra /> Paid seat</span>
+                                    </div>
+                                    <div className="fare-cancellation" onClick={() => setCancellationDiv(!cancellationDiv)}><FaChevronRight /> Cancellation and refund policy</div>
+                                    {cancellationDiv && <div className="fare-cancellation-text">
+                                        <p>The customer must use the My Trips section on Cleartrip App / Website and raise a request for cancellation by selecting ‘Due to medical emergency’ as the reason. Alternatively, customers can call us at +91-9595333333. </p>
+                                        <p>On cancellation, the refund amount post deduction of applicable cancellation charges will be credited to the original source.</p>
+                                        <p>An email will be sent to the customers to upload the required documents on a link to claim the Medi-Cancel benefit.</p>
+                                        <p>On receiving the documents, Cleartrip will validate and process the refund equivalent to cancellation charges for eligible cases. Once validated, refund will be processed within 2-3 days.</p>
+                                        <span>Note: Customers can file for a claim by uploading the required documents until 15 days after cancelling the flight.</span>
+                                    </div>}
 
-                                <div className="checkout-flight-time-container">
-                                    <div>
-                                        <p><strong>{selectedFlightData[0].departureTime}</strong> {selectedFlightData[0].source}</p>
+                                    <div className="fare-info-container">
+                                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3b/Eo_circle_green_checkmark.svg/1200px-Eo_circle_green_checkmark.svg.png" />
+                                        <div className="fare-information">
+                                            <div className="fare-flight-logo">
+                                                <img src="https://seeklogo.com/images/I/indigo-logo-EDBB4B3C09-seeklogo.com.png" />
+                                                IndiGo
+                                            </div>
+                                            <div className="fare-extra-info">
+                                                <span>{selectedFlightData[0].source} <FaArrowRightLong /> {selectedFlightData[0].destination}</span>
+                                                <p>{flightDay}, {startDate}</p>
+                                            </div>
+                                            <div className="fare-extra-info">
+                                                <span>{selectedFlightData[0].departureTime} - {selectedFlightData[0].arrivalTime}</span>
+                                                <p>{selectedFlightData[0].duration} hr ·<span>{selectedFlightData[0].stops} {selectedFlightData[0].stops === 1 ? "stop" : "stops"}</span></p>
+                                            </div>
+                                            <div className="fare-faretype">{fareType}</div>
+                                        </div>
                                     </div>
-                                    <div>
-                                        <p>{selectedFlightData[0].duration} hr</p>
-                                    </div>
-                                    <div>
-                                        <p><strong>{selectedFlightData[0].arrivalTime}</strong> {selectedFlightData[0].destination}</p>
-                                    </div>
-                                </div>
-
-                                <div className="checkout-flight-price">
-                                    ₹ {selectedFlightData[0].ticketPrice}
                                 </div>
                             </div>
-                        </div>
+                        </>
                     }
 
                     {selectedFlightData && selectedFlightData.length === 2 && (
@@ -262,6 +314,73 @@ export default function Checkout() {
 
                                     <div className="checkout-flight-price">
                                         ₹ {selectedFlightData[1].ticketPrice}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className="selected-flight-fare-section">
+                                <div className="flight-round-fare-heading">
+                                    <div className="round-fare-heading">
+                                        <RiFlightTakeoffFill /> {selectedFlightData[0].source} <FaArrowRightLong /> {selectedFlightData[0].destination} : {fareType}
+                                    </div>
+                                    <GiReturnArrow className="fare-return-icon"/>
+                                    <div className="round-fare-heading">
+                                        <RiFlightLandLine /> {selectedFlightData[1].source} <FaArrowRightLong /> {selectedFlightData[1].destination} : {fareType}
+                                    </div>
+                                </div>
+                                <div className="flight-fare-content">
+                                    <div className="flight-fare-info">
+                                        <span><SlCalender /> Date change allowed from ₹ {selectedFlightData[0].ticketPrice / 4}</span>
+                                        <span><IoBagHandleOutline /> Cabin/person: 7kg</span>
+                                        <span><MdLuggage /> Check-in/person: 15kg(1 piece)</span>
+                                        <span><MdFreeCancellation /> Cancellation fee starts from ₹ 1999</span>
+                                        <span><IoFastFoodOutline /> Paid meal</span>
+                                        <span><MdOutlineAirlineSeatReclineExtra /> Paid seat</span>
+                                    </div>
+                                    <div className="fare-cancellation" onClick={() => setCancellationDiv(!cancellationDiv)}><FaChevronRight /> Cancellation and refund policy</div>
+                                    {cancellationDiv && <div className="fare-cancellation-text">
+                                        <p>The customer must use the My Trips section on Cleartrip App / Website and raise a request for cancellation by selecting ‘Due to medical emergency’ as the reason. Alternatively, customers can call us at +91-9595333333. </p>
+                                        <p>On cancellation, the refund amount post deduction of applicable cancellation charges will be credited to the original source.</p>
+                                        <p>An email will be sent to the customers to upload the required documents on a link to claim the Medi-Cancel benefit.</p>
+                                        <p>On receiving the documents, Cleartrip will validate and process the refund equivalent to cancellation charges for eligible cases. Once validated, refund will be processed within 2-3 days.</p>
+                                        <span>Note: Customers can file for a claim by uploading the required documents until 15 days after cancelling the flight.</span>
+                                    </div>}
+
+                                    <div className="round-fare-info-container">
+                                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3b/Eo_circle_green_checkmark.svg/1200px-Eo_circle_green_checkmark.svg.png" />
+                                        <div className="round-fare-information-container">
+                                            <div className="round-fare-information">
+                                                <div className="fare-flight-logo">
+                                                    <img src="https://seeklogo.com/images/I/indigo-logo-EDBB4B3C09-seeklogo.com.png" />
+                                                    IndiGo
+                                                </div>
+                                                <div className="fare-extra-info">
+                                                    <span>{selectedFlightData[0].source} <FaArrowRightLong /> {selectedFlightData[0].destination}</span>
+                                                    <p>{flightDay}, {startDate}</p>
+                                                </div>
+                                                <div className="fare-extra-info">
+                                                    <span>{selectedFlightData[0].departureTime} - {selectedFlightData[0].arrivalTime}</span>
+                                                    <p>{selectedFlightData[0].duration} hr ·<span>{selectedFlightData[0].stops} {selectedFlightData[0].stops === 1 ? "stop" : "stops"}</span></p>
+                                                </div>
+                                                <div className="fare-faretype">{fareType}</div>
+                                            </div>
+
+                                            <div className="round-fare-information">
+                                                <div className="fare-flight-logo">
+                                                    <img src="https://seeklogo.com/images/I/indigo-logo-EDBB4B3C09-seeklogo.com.png" />
+                                                    IndiGo
+                                                </div>
+                                                <div className="fare-extra-info">
+                                                    <span>{selectedFlightData[1].source} <FaArrowRightLong /> {selectedFlightData[1].destination}</span>
+                                                    <p>{flightDayTwo}, {endDate}</p>
+                                                </div>
+                                                <div className="fare-extra-info">
+                                                    <span>{selectedFlightData[1].departureTime} - {selectedFlightData[1].arrivalTime}</span>
+                                                    <p>{selectedFlightData[1].duration} hr ·<span>{selectedFlightData[1].stops} {selectedFlightData[1].stops === 1 ? "stop" : "stops"}</span></p>
+                                                </div>
+                                                <div className="fare-faretype">{fareType}</div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -431,7 +550,9 @@ export default function Checkout() {
                         <div>
                             <div>+91</div>
                             <input
-                                type="text"
+                                type="tel"
+                                pattern="[0-9]{10}"
+                                maxLength="10"
                                 value={phone}
                                 onChange={(e) => setPhone(e.target.value)}
                             />
@@ -535,12 +656,12 @@ export default function Checkout() {
                                     3 / 4 * childCount +
                                     1 / 2 * infantCount
                                 )
-                                +
-                                selectedFlightData[1].ticketPrice * (
-                                    adultCount +
-                                    3 / 4 * childCount +
-                                    1 / 2 * infantCount
-                                )}
+                                    +
+                                    selectedFlightData[1].ticketPrice * (
+                                        adultCount +
+                                        3 / 4 * childCount +
+                                        1 / 2 * infantCount
+                                    )}
                             </div>
                             <div className="checkout-passanger-count">
                                 {adultCount > 0 && (

@@ -67,11 +67,11 @@ export default function Hotel() {
     }, [currentImageIndex]);
 
     if (loading) {
-        return <div>Loading...</div>;
+        return <div className="api-loading"></div>;
     }
 
     if (error) {
-        return <div>Error: {error.message}</div>;
+        return <div className="api-error">{error.message}</div>;
     }
 
     const handleSelectedHotel = (hotelId) => {
