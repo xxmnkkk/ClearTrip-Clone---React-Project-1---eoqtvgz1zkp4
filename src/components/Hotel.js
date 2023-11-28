@@ -5,7 +5,9 @@ import SlideShow from "./SlideShow";
 import { useNavigate } from "react-router-dom";
 
 export default function Hotel() {
-    const { hotelLocation, selectedHotel, setSelectedHotel, hotelLocationArray, setHotelLocationArray } = useContext(AuthContext);
+    const { hotelLocation, selectedHotel, setSelectedHotel, hotelLocationArray, setHotelLocationArray, setSelectedFlightData } = useContext(AuthContext);
+
+    setSelectedFlightData(null);
 
     const [hotelData, setHotelData] = useState({ data: { hotels: [] } });
     const [loading, setLoading] = useState(true);
@@ -67,11 +69,13 @@ export default function Hotel() {
     }, [currentImageIndex]);
 
     if (loading) {
-        return <div className="api-loading"></div>;
+        return <div className="api-loading-container">
+            <div className="api-loading"></div>
+        </div>
     }
 
     if (error) {
-        return <div className="api-error">{error.message}</div>;
+        return <div className="api-error">{error.message}</div>
     }
 
     const handleSelectedHotel = (hotelId) => {

@@ -60,6 +60,13 @@ function App() {
   const [hotelLocationHiddenDiv, setHotelLocationHiddenDiv] = useState(false);
   const [loggedInUserName, setLoggedInUserName] = useState();
   const [fareType, setFareType] = useState('Regular fare');
+  const [checkoutStartDate, setCheckoutStartDate] = useState('');
+  const [checkoutEndDate, setCheckoutEndDate] = useState('');
+  const [roundFlightDetailsDiv, setRoundFlightDetailsDiv] = useState(false);
+  const [selectedTrip, setSelectedTrip] = useState("oneway");
+
+  const [paymentSuccessDiv, setPaymentSuccessDiv] = useState(false);
+  const [paymentFailureDiv, setPaymentFailureDiv] = useState(false);
 
   const updateDeparture = (value) => {
     setDeparture(value);
@@ -74,8 +81,8 @@ function App() {
   }
 
   return (<>
-    <AuthContext.Provider value={{ isActive, setIsActive, isActivePassanger, setIsActivePassanger, flightDepartureHiddenDiv, setFlightDepartureHiddenDiv, flightArrivalHiddenDiv, setFlightArrivalHiddenDiv, showDate, setShowDate, hiddenDiv, setHiddenDiv, hotelLocationHiddenDiv, setHotelLocationHiddenDiv, roomCount, setRoomCount, isLoggedIn, setIsLoggedIn, loginModal, setLoginModal, profileModal, setProfileModal, departure, arrival, updateDeparture, updateArrival, updateHotelLocation, hotelLocation, selectedHotel, setSelectedHotel, hotelLocationArray, setHotelLocationArray, selectedRoom, setSelectedRoom, hotelDetail, setHotelDetail, flightDay, setFlightDay, flightDayTwo, setFlightDayTwo, selectedFlightTrip, setSelectedFlightTrip, selectedFlightData, setSelectedFlightData, selectedHotelData, setSelectedHotelData, calenderDateDifference, setCalenderDateDifference, startDate, setStartDate, endDate, setEndDate, flightClass, setFlightClass, adultCount, setAdultCount, childCount, setChildCount, infantCount, setInfantCount, hotelAdultCount, setHotelAdultCount, hotelChildCount, setHotelChildCount 
-    , loggedInUserName, setLoggedInUserName , fareType, setFareType
+    <AuthContext.Provider value={{
+      isActive, setIsActive, isActivePassanger, setIsActivePassanger, flightDepartureHiddenDiv, setFlightDepartureHiddenDiv, flightArrivalHiddenDiv, setFlightArrivalHiddenDiv, showDate, setShowDate, hiddenDiv, setHiddenDiv, hotelLocationHiddenDiv, setHotelLocationHiddenDiv, roomCount, setRoomCount, isLoggedIn, setIsLoggedIn, loginModal, setLoginModal, profileModal, setProfileModal, departure, arrival, updateDeparture, updateArrival, updateHotelLocation, hotelLocation, selectedHotel, setSelectedHotel, hotelLocationArray, setHotelLocationArray, selectedRoom, setSelectedRoom, hotelDetail, setHotelDetail, flightDay, setFlightDay, flightDayTwo, setFlightDayTwo, selectedFlightTrip, setSelectedFlightTrip, selectedFlightData, setSelectedFlightData, selectedHotelData, setSelectedHotelData, calenderDateDifference, setCalenderDateDifference, startDate, setStartDate, endDate, setEndDate, flightClass, setFlightClass, adultCount, setAdultCount, childCount, setChildCount, infantCount, setInfantCount, hotelAdultCount, setHotelAdultCount, hotelChildCount, setHotelChildCount, loggedInUserName, setLoggedInUserName, fareType, setFareType, checkoutStartDate, setCheckoutStartDate, checkoutEndDate, setCheckoutEndDate, paymentSuccessDiv, setPaymentSuccessDiv, paymentFailureDiv, setPaymentFailureDiv, roundFlightDetailsDiv, setRoundFlightDetailsDiv , selectedTrip, setSelectedTrip
     }}>
       <Header />
 
@@ -88,7 +95,7 @@ function App() {
         <Route path='/hotelModal' element={<HotelModal />} />
         <Route path='/checkout' element={<Checkout />} />
         <Route path='/payment' element={<Payment />} />
-        <Route path="/payment/success" element={<SuccessModal />}/> 
+        <Route path="/payment/success" element={<SuccessModal />} />
       </Routes>
 
       <Footer />

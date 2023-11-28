@@ -10,7 +10,7 @@ export default function SuccessModal() {
                 </div>
                 <div className="payment-successful">PAYMENT SUCCESSFUL</div>
                 <NavLink to="/mytrip" className="success-navlink">
-                <div className="success-button">GO TO YOUR TRIPS</div>
+                    <div className="success-button">GO TO YOUR TRIPS</div>
                 </NavLink>
                 <p>To view your travelling information, visit <strong>my trips</strong> in your profile section or simply click the above link to view your trips.</p>
             </div>

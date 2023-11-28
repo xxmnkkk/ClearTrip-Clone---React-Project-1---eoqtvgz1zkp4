@@ -8,18 +8,22 @@ import { FaArrowRightLong } from "react-icons/fa6";
 import { MdOutlinePeople } from "react-icons/md";
 import { RiFlightLandLine, RiFlightTakeoffFill } from "react-icons/ri";
 import { useNavigate } from "react-router-dom";
+import SuccessModal from "./SuccessModal";
+import FailureModal from "./FailureModal";
 
 
 export default function Payment() {
-    const { selectedHotelData, selectedRoom, roomCount, calenderDateDifference, selectedFlightData, startDate, endDate, flightDay, flightDayTwo, adultCount, childCount, infantCount, hotelAdultCount, hotelChildCount} = useContext(AuthContext);
+    const { selectedHotelData, selectedRoom, roomCount, calenderDateDifference, selectedFlightData, startDate, endDate, flightDay, flightDayTwo, adultCount, childCount, infantCount, hotelAdultCount, hotelChildCount, checkoutStartDate, checkoutEndDate, paymentSuccessDiv, setPaymentSuccessDiv, paymentFailureDiv, setPaymentFailureDiv } = useContext(AuthContext);
+
+    console.log(selectedFlightData)
 
     const navigate = useNavigate();
 
-    console.log("start date: ", startDate);
-    console.log("end date: ", endDate);
-    console.log("day: ", flightDay);
-    console.log("day2: ", flightDayTwo);
-    console.log(selectedFlightData);
+    // console.log("start date: ", startDate);
+    // console.log("end date: ", endDate);
+    // console.log("day: ", flightDay);
+    // console.log("day2: ", flightDayTwo);
+    // console.log(selectedFlightData);
 
     const [creditDiv, setCreditDiv] = useState(true);
     const [debitDiv, setDebitDiv] = useState(false);
@@ -29,41 +33,82 @@ export default function Payment() {
     const [paymentError, setPaymentError] = useState('');
     const [agreedToTerms, setAgreedToTerms] = useState(false);
 
+    const [body, setBody] = useState();
+
+    const [isBodySet, setIsBodySet] = useState(false);
+
     useEffect(() => {
-        const token = sessionStorage.getItem('userToken');
-        console.log(token);
+        if (!isBodySet) {
+            const userId = sessionStorage.getItem("userId");
 
-        const Body = {};
+            let newBody;
 
-        if (selectedFlightData && selectedFlightData.length > 0) {
-            Body.bookingType = 'flight';
-            Body.requiredField = selectedFlightData;
-        }
-
-        if (selectedHotelData) {
-            Body.bookingType = 'hotel';
-            Body.requiredField = selectedHotelData;
-        }
-
-        const config = {
-            headers: {
-                'Authorization': `Bearer ${token}`,
-                "projectID": "f104bi07c490",
+            if (selectedFlightData && selectedFlightData.length > 0) {
+                const flightId = selectedFlightData[0]._id;
+                newBody = {
+                    bookingType: "flight",
+                    userId: userId,
+                    bookingDetails: {
+                        flightId: flightId,
+                        startDate: checkoutStartDate,
+                        endDate: checkoutEndDate
+                    }
+                };
+            } else if (selectedHotelData) {
+                const hotelId = selectedHotelData._id;
+                newBody = {
+                    bookingType: "hotel",
+                    userId: userId,
+                    bookingDetails: {
+                        flightId: hotelId,
+                        startDate: checkoutStartDate,
+                        endDate: checkoutEndDate
+                    }
+                };
             }
-        }
 
-        axios.post('https://academics.newtonschool.co/api/v1/bookingportals/booking', Body, config)
-            .then(response => {
-                console.log('Response:', response.data);
-            })
-            .catch(error => {
-                if (error.response && error.response.status === 400) {
-                    console.log('Validation errors:', error.response.data.message);
-                } else {
-                    console.log('Error occurred:', error.message);
+            setBody(newBody);
+            setIsBodySet(true);
+        }
+    }, [isBodySet, selectedFlightData, selectedHotelData, checkoutStartDate, checkoutEndDate]);
+
+    const checkout = () => {
+        if (body) {
+            const token = sessionStorage.getItem("userToken");
+
+            const config = {
+                method: "POST",
+                body: JSON.stringify(body),
+                headers: {
+                    "Content-Type": "application/json",
+                    "projectID": "f104bi07c490",
+                    "Authorization": `Bearer ${token}`
                 }
-            });
-    }, [selectedFlightData, selectedHotelData]);
+            };
+
+            fetch('https://academics.newtonschool.co/api/v1/bookingportals/booking', config)
+                .then((res) => res.json())
+                .then((result) => {
+                    console.log(result);
+                    // navigate("/payment/success");
+                    const userName = sessionStorage.getItem("loggedInUserName");
+                    const existingUserBookingDetails = JSON.parse(localStorage.getItem(`${userName}_bookingDetails`) || '[]');
+                    const bookingDetails = [...existingUserBookingDetails, selectedFlightData];
+                    localStorage.setItem(`${userName}_bookingDetails`, JSON.stringify(bookingDetails));
+                    if (result.error === 'Hotel not available or fully booked') {
+                        setPaymentFailureDiv(true);
+                        sessionStorage.setItem('paymentError', result.error);
+                    }
+                    else {
+                        setPaymentSuccessDiv(true);
+                    }
+                })
+                .catch((e) => {
+                    console.log(e)
+                    setPaymentFailureDiv(true);
+                });
+        }
+    }
 
     const handleCreditDiv = () => {
         setCreditDiv(true);
@@ -111,45 +156,48 @@ export default function Payment() {
             const upiIdInput = document.querySelector('input[name="upiId"]');
             if (upiIdInput.value === '') {
                 setPaymentError('Please enter your UPI ID to complete the payment.');
-            }else{
+            } else {
                 console.log("Setting showSuccessModal to true...");
-                navigate("/payment/success");
+                // navigate("/payment/success");
+                checkout();
             }
-        } 
+        }
 
-        if(debitDiv){
+        if (debitDiv) {
             const debitNumberInputs = document.querySelector('input[name="debitNumberInput"]');
             const debitCvvInputs = document.querySelector('input[name="debitCvvInput"]');
             const debitDateInputs = document.querySelector('input[name="debitDateInput"]');
             const debitNameInputs = document.querySelector('input[name="debitNameInput"]');
 
-            if(debitNumberInputs.value === '' ||
-            debitCvvInputs.value === '' ||
-            debitDateInputs.value === '' ||
-            debitNameInputs.value === ''
-            ){
+            if (debitNumberInputs.value === '' ||
+                debitCvvInputs.value === '' ||
+                debitDateInputs.value === '' ||
+                debitNameInputs.value === ''
+            ) {
                 setPaymentError('Please enter your debit card details to complete the payment.');
-            }else{
+            } else {
                 console.log("Setting showSuccessModal to true...");
-                navigate("/payment/success");
+                // navigate("/payment/success");
+                checkout();
             }
         }
 
-        if(creditDiv){
+        if (creditDiv) {
             const creditNumberInputs = document.querySelector('input[name="creditNumberInput"]');
             const creditCvvInputs = document.querySelector('input[name="creditCvvInput"]');
             const creditDateInputs = document.querySelector('input[name="creditDateInput"]');
             const creditNameInputs = document.querySelector('input[name="creditNameInput"]');
 
-            if(creditNumberInputs.value === '' ||
-            creditCvvInputs.value === '' ||
-            creditDateInputs.value === '' ||
-            creditNameInputs.value === ''
-            ){
+            if (creditNumberInputs.value === '' ||
+                creditCvvInputs.value === '' ||
+                creditDateInputs.value === '' ||
+                creditNameInputs.value === ''
+            ) {
                 setPaymentError('Please enter your credit card details to complete the payment.');
-            }else{
+            } else {
                 console.log("Setting showSuccessModal to true...");
-                navigate("/payment/success");
+                // navigate("/payment/success");
+                checkout();
             }
         }
 
@@ -159,11 +207,12 @@ export default function Payment() {
 
             if (nameInput.value === '' || passwordInput.value === '') {
                 setPaymentError('Please enter your net banking details to complete the payment.');
-            }else{
+            } else {
                 console.log("Setting showSuccessModal to true...");
-                navigate("/payment/success");
+                // navigate("/payment/success");
+                checkout();
             }
-        } 
+        }
     }
 
     return (
@@ -321,6 +370,9 @@ export default function Payment() {
                         </div>
                     </div>
                 </div>
+
+                {paymentSuccessDiv && <SuccessModal />}
+                {paymentFailureDiv && <FailureModal />}
 
                 <div className="payment-review-container">
                     <div className="total-payment-summary">

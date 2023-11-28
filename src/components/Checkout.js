@@ -16,12 +16,14 @@ import { GiReturnArrow } from "react-icons/gi";
 
 
 export default function Checkout() {
-    const { selectedRoom, selectedHotelData, selectedFlightData, roomCount, calenderDateDifference, startDate, endDate, flightDay, flightDayTwo, flightClass, adultCount, childCount, infantCount, hotelAdultCount, hotelChildCount, fareType } = useContext(AuthContext);
+    const { selectedRoom, selectedHotelData, selectedFlightData, roomCount, calenderDateDifference, startDate, endDate, flightDay, flightDayTwo, flightClass, adultCount, childCount, infantCount, hotelAdultCount, hotelChildCount, fareType , setRoundFlightDetailsDiv} = useContext(AuthContext);
 
     // console.log("start date: ",startDate );
     // console.log("end date: ", endDate);
     // console.log("day: ", flightDay);
     // console.log("day2: ", flightDayTwo);
+
+    setRoundFlightDetailsDiv(false);
 
     const getEmptyPassenger = () => {
         return {
@@ -696,6 +698,3 @@ export default function Checkout() {
         </div>
     )
 }
-
-
-

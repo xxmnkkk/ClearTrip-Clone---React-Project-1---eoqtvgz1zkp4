@@ -2,6 +2,7 @@ import React, { useContext, useState } from 'react';
 import { AiOutlineClose } from "react-icons/ai";
 import axios from 'axios';
 import { AuthContext } from './App';
+import image from '../image/login-img.jpg';
 
 const LoginModal = ({ onClose , onLoginSuccess }) => {
     // const {loggedInUserName,setLoggedInUserName} = useContext(AuthContext);
@@ -56,16 +57,18 @@ const LoginModal = ({ onClose , onLoginSuccess }) => {
             if (response.data.token) {
                 sessionStorage.setItem("userToken", response.data.token);
                 sessionStorage.setItem("loggedInUser", JSON.stringify(loginDetails));
-                // Use a key that uniquely identifies the user for userDetails
-                localStorage.setItem(`userDetails_${loginDetails.email}`, JSON.stringify(loginDetails)); // Store login details
+                localStorage.setItem(`userDetails_${loginDetails.email}`, JSON.stringify(loginDetails)); 
                 onLoginSuccess();
             }
 
             if(response.data.data.name){
-                // setLoggedInUserName(response.data.data.name)
                 sessionStorage.setItem('loggedInUserName', response.data.data.name)
                 console.log("logged in user name in login component: ", response.data.data.name);
             }
+
+            if(response.data.data._id)(
+                sessionStorage.setItem("userId", response.data.data._id)
+            )
         })
         .catch((error) => {
             console.log(error)
@@ -90,8 +93,7 @@ const LoginModal = ({ onClose , onLoginSuccess }) => {
 
             if (response.data.token) {
                 sessionStorage.setItem("userToken", response.data.token);
-                // Use a key that uniquely identifies the user for newUser
-                localStorage.setItem(`newUser_${signupDetails.email}`, JSON.stringify(signupDetails)); // Store signup details
+                localStorage.setItem(`newUser_${signupDetails.email}`, JSON.stringify(signupDetails)); 
             }
         })
         .catch((error) => {
@@ -119,7 +121,7 @@ const LoginModal = ({ onClose , onLoginSuccess }) => {
     return (
         <div className="modal-overlay">
             <div className='modal-image-container'>
-                <img src="https://images.unsplash.com/photo-1574438831746-b3f4bada685d?auto=format&fit=crop&q=80&w=3417&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" width="400px" />
+                <img src={image} width="400px" />
             </div>
             <div className='modal-login-form'>
                 <AiOutlineClose onClick={onClose} className='icon' />

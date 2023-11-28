@@ -4,12 +4,12 @@ import { RiArrowLeftRightLine, RiArrowDropUpLine, RiArrowDropDownLine } from 're
 import { BsArrowRight } from 'react-icons/bs';
 import { GrFormCheckmark } from 'react-icons/gr';
 import { AiOutlineUser, AiOutlinePlusCircle, AiOutlineMinusCircle } from 'react-icons/ai';
-// import { GiAirplaneDeparture, GiAirplaneArrival } from 'react-icons/gi';
 import DateSelector from './DateSelector';
 import { NavLink, Navigate, useNavigate } from 'react-router-dom';
 import { AuthContext } from './App.js';
 import LoginModal from './LoginModal.js';
 import DesAndArr from './DesAndArr.js';
+import PassangerFlight from './PassangerFlight.js';
 
 const tripOption = [
     {
@@ -27,16 +27,16 @@ const tripOption = [
 ]
 
 const FlightBookingSection = () => {
+    const { isActive, setIsActive, isActivePassanger, setIsActivePassanger, setIsLoggedIn, setLoginModal, loginModal, selectedFlightTrip, setSelectedFlightTrip, flightClass, setFlightClass, adultCount, setAdultCount, childCount, setChildCount, infantCount, setInfantCount, setFlightDepartureHiddenDiv, setFlightArrivalHiddenDiv, setShowDate, fareType, setFareType, setPaymentFailureDiv, setRoundFlightDetailsDiv } = useContext(AuthContext);
+
     const [index, setIndex] = useState(0);
     const [selectedTrip, setSelectedTrip] = useState("oneway");
 
-    console.log("Selected Trip Option: ", selectedTrip);
-
-    const { isActive, setIsActive, isActivePassanger, setIsActivePassanger, setIsLoggedIn, setLoginModal, loginModal, selectedFlightTrip, setSelectedFlightTrip, flightClass, setFlightClass, adultCount, setAdultCount, childCount, setChildCount, infantCount, setInfantCount, setFlightDepartureHiddenDiv, setFlightArrivalHiddenDiv, setShowDate , fareType, setFareType} = useContext(AuthContext);
-
     useEffect(() => {
         setSelectedFlightTrip(selectedTrip);
-    }, [selectedTrip]);
+        setPaymentFailureDiv(false);
+        setRoundFlightDetailsDiv(false);
+    }, [selectedTrip, setPaymentFailureDiv, setRoundFlightDetailsDiv]);
 
     console.log("Selected Trip Option print 2: ", selectedFlightTrip);
 
@@ -133,10 +133,11 @@ const FlightBookingSection = () => {
                                 </li>
                             ))}
                         </ul>
-                    </div>}
+                    </div>
+                    }
                 </div>
 
-                <div className='passanger-button-container'>
+                {/* <div className='passanger-button-container'>
                     <div className='passenger-button' onClick={toggleHiddenPassangerDiv}>
                         <AiOutlineUser />
                         {`${adultCount > 0 ? `${adultCount} ${adultCount === 1 ? 'Adult, ' : 'Adults, '}` : ''}`}
@@ -203,8 +204,11 @@ const FlightBookingSection = () => {
                                 Premium economy
                             </div>
                         </div>
-                    </div>}
-                </div>
+                    </div>
+                    }
+                </div> */}
+
+                <PassangerFlight />
             </div>
 
             <div className='fare-type-div'>
