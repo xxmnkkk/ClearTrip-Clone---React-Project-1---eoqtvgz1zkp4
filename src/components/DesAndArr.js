@@ -16,9 +16,6 @@ export default function DesAndArr() {
 
     const { departure, arrival, updateDeparture, updateArrival, flightDepartureHiddenDiv, setFlightDepartureHiddenDiv, flightArrivalHiddenDiv, setFlightArrivalHiddenDiv, setIsActive, setIsActivePassanger, setShowDate } = useContext(AuthContext);
 
-    // const departureInputRef = useRef();
-    // const arrivalInputRef = useRef();
-
     const handleDepartureInputChange = () => {
         const value = e.target.value;
         updateDeparture(value);

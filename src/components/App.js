@@ -46,7 +46,7 @@ function App() {
   const [startDate, setStartDate] = useState();
   const [endDate, setEndDate] = useState();
   const [flightClass, setFlightClass] = useState('Economy');
-  const [adultCount, setAdultCount] = useState(0);
+  const [adultCount, setAdultCount] = useState(1);
   const [childCount, setChildCount] = useState(0);
   const [infantCount, setInfantCount] = useState(0);
   const [hotelAdultCount, setHotelAdultCount] = useState(0);

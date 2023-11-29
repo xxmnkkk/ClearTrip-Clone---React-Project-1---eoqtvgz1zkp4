@@ -2,6 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "./App";
 import axios from "axios";
 import profileImage from '../image/profile-image.jpg'
+import { NavLink } from "react-router-dom";
 
 export default function MyTrip() {
     const { setPaymentSuccessDiv } = useContext(AuthContext);
@@ -36,7 +37,7 @@ export default function MyTrip() {
                 setFlightData(userBookingDetails);
 
                 // const flightData = response.data.data.map((entry) => ({
-                //     // bookingType: entry.booking_type,
+                //     bookingType: entry.booking_type,
                 //     flightId: entry._id,
                 //     startDate: entry.start_date,
                 //     endDate: entry.end_date
@@ -116,7 +117,7 @@ export default function MyTrip() {
 
             <div className="mytrip-mytrip-content-and-profile-section">
                 <div className="mytrip-info-div">
-                    {flightData && flightData.map((innerArray, index) => (
+                    {flightData ? flightData.map((innerArray, index) => (
                         <div key={index} className="mytrip-flight-card">
                             {innerArray.map((flight) => (
                                 <div key={flight._id} className="mytrip-flight-card-section">
@@ -156,7 +157,17 @@ export default function MyTrip() {
                                 </div>
                             ))}
                         </div>
-                    ))}
+                    ))
+                        :
+
+                        <div className="mytrip-home-button-container">
+                            <p>You currently have no bookings associated to your account. To book flights or hotels, click the home button below.</p>
+                            <NavLink to="/main" className="mytrip-navlink">
+                                <button className="mytrip-home-button">HOME</button>
+                            </NavLink>
+                        </div>
+
+                    }
                 </div>
 
                 <div className="mytrip-profile-div">
