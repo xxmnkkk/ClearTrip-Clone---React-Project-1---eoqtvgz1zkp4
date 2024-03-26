@@ -1,3 +1,5 @@
+// This component basically just contains some details about the website in form of texts
+
 export default function UselessText() {
     return (
         <div className='useless-text-container'>

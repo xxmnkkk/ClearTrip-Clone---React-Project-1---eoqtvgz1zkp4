@@ -1,9 +1,12 @@
 import React, { useState } from "react";
 import {GrFormNext , GrFormPrevious} from "react-icons/gr";
 
+// Im using this component for my image slideshow that ive used inside of the searched hotel card and selected hotel modal
 const SlideShow = ({ images }) => {
+  // here im managing my local state to keep track of the current index
   const [currentIndex, setCurrentIndex] = useState(0);
 
+  
   const nextImage = () => {
     setCurrentIndex((currentIndex + 1) % images.length);
   };

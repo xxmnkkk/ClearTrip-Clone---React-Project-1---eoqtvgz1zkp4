@@ -3,8 +3,7 @@ import { AuthContext } from "./App"
 import { AiOutlineUser, AiOutlinePlusCircle, AiOutlineMinusCircle } from 'react-icons/ai';
 import { RiArrowDropUpLine, RiArrowDropDownLine } from 'react-icons/ri';
 
-
-
+// An array of objects with some icon details
 const tripOption = [
     {
         dropdown: <RiArrowDropDownLine className='main-icons' />,
@@ -17,11 +16,11 @@ const tripOption = [
 ]
 
 function PassangerFlight() {
-
+    // Here im importing all the state that i want to use inside of this component and also im defining additional stated like index and selectedtrip that will be used inside of this component.
     const {adultCount, setAdultCount, childCount, setChildCount, infantCount, setInfantCount , isActivePassanger, setIsActivePassanger , flightClass, setFlightClass , setIsActive , setFlightDepartureHiddenDiv , setFlightArrivalHiddenDiv , setShowDate} = useContext(AuthContext);
-
     const [index, setIndex] = useState(0);
 
+    // Here is a function that handles the hidden passanger div when clicked upon
     const toggleHiddenPassangerDiv = (e) => {
         setIsActivePassanger(!isActivePassanger);
         setIsActive(false);
@@ -31,6 +30,7 @@ function PassangerFlight() {
         setShowDate(false);
     }
 
+    // This function basically updates the count of adult, child and infant
     const updateCount = (type, action) => {
         if (action === 'increment') {
             if (type === 'adult') {
@@ -52,6 +52,7 @@ function PassangerFlight() {
     };
 
     return (
+        // Some basic code for the ui of paggenger hidden modal 
         <div className='passanger-button-container'>
             <div className='passenger-button' onClick={toggleHiddenPassangerDiv}>
                 <AiOutlineUser />

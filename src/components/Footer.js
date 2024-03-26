@@ -2,6 +2,7 @@ import { FaFacebook , FaInstagramSquare , FaTwitter , FaLinkedin} from "react-ic
 
 export default function Footer() {
     return (
+        // Very basic code for the footer section here displaying some information and external links for the website
         <div className="footer-container">
             <div className="footer-section">
                 <div className="footer-links-container">

@@ -1,12 +1,10 @@
 import React, { useContext, useState } from 'react';
 import { AiOutlineClose } from "react-icons/ai";
 import axios from 'axios';
-import { AuthContext } from './App';
 import image from '../image/login-img.jpg';
 
 const LoginModal = ({ onClose , onLoginSuccess }) => {
-    // const {loggedInUserName,setLoggedInUserName} = useContext(AuthContext);
-
+    // Here im defining my state's for storing in what form ive selected, login errors, signup errors, login details, signup details.
     const [activeForm, setActiveForm] = useState('sign-in');
     const [loginError, setLoginError] = useState('');
     const [signupError, setSignupError] = useState('');
@@ -22,6 +20,7 @@ const LoginModal = ({ onClose , onLoginSuccess }) => {
         password: '',
     });
 
+    // This function performs the toggling of sign-up form and login form
     const toggleForm = (e) => {
         setActiveForm(e);
 
@@ -39,6 +38,7 @@ const LoginModal = ({ onClose , onLoginSuccess }) => {
         }
     };
 
+    // This function handles the login click, which calls the api with the required details
     const handleLogin = (e) => {
         e.preventDefault();
         console.log('Login details:', loginDetails);
@@ -54,6 +54,7 @@ const LoginModal = ({ onClose , onLoginSuccess }) => {
         .then((response) => {
             console.log("response: ", response.data)
 
+            // If the is a token inside of the response, im setting it inside of the local storage and as well and user details. Additionally im soring the user details in local storage just for keeping tract of what accounts ive made 
             if (response.data.token) {
                 sessionStorage.setItem("userToken", response.data.token);
                 sessionStorage.setItem("loggedInUser", JSON.stringify(loginDetails));
@@ -61,11 +62,13 @@ const LoginModal = ({ onClose , onLoginSuccess }) => {
                 onLoginSuccess();
             }
 
+            // Here im setting in the user name inside of the session storage
             if(response.data.data.name){
                 sessionStorage.setItem('loggedInUserName', response.data.data.name)
                 console.log("logged in user name in login component: ", response.data.data.name);
             }
 
+            // Here im setting in the user id inside of the session storage
             if(response.data.data._id)(
                 sessionStorage.setItem("userId", response.data.data._id)
             )
@@ -76,6 +79,7 @@ const LoginModal = ({ onClose , onLoginSuccess }) => {
         })
     };
 
+    // This function handles the signup click, which calls the api with the required details
     const handleSignup = (e) => {
         e.preventDefault();
         console.log('Signup details:', signupDetails);
@@ -91,6 +95,7 @@ const LoginModal = ({ onClose , onLoginSuccess }) => {
         .then((response) => {
             console.log("response: " , response.data)
 
+            // Same steps but limited like the login form
             if (response.data.token) {
                 sessionStorage.setItem("userToken", response.data.token);
                 localStorage.setItem(`newUser_${signupDetails.email}`, JSON.stringify(signupDetails)); 
@@ -102,6 +107,7 @@ const LoginModal = ({ onClose , onLoginSuccess }) => {
         })
     };
 
+    // Here im setting in the login details inside of the state
     const handleLoginInput = (e) => {
         const { name, value } = e.target;
         setLoginDetails({
@@ -110,6 +116,7 @@ const LoginModal = ({ onClose , onLoginSuccess }) => {
         })
     }
 
+    // Here im setting ip the signup details inside of the state
     const handleSignupInput = (e) => {
         const { name, value } = e.target;
         setSignupDetails({
@@ -119,6 +126,7 @@ const LoginModal = ({ onClose , onLoginSuccess }) => {
     }
 
     return (
+        // Some basic code for the ui of login/sign-up modal
         <div className="modal-overlay">
             <div className='modal-image-container'>
                 <img src={image} width="400px" />
@@ -126,6 +134,7 @@ const LoginModal = ({ onClose , onLoginSuccess }) => {
             <div className='modal-login-form'>
                 <AiOutlineClose onClick={onClose} className='icon' />
 
+                {/* This from is for the login modal */}
                 {activeForm === 'sign-in' ? (
                     <div className='sign-in-div'>
                         <h2>Login </h2>
@@ -137,6 +146,7 @@ const LoginModal = ({ onClose , onLoginSuccess }) => {
                         <div className='error-div-loginandsignup'>{loginError}</div>
                     </div>
                 ) : (
+                    // And this code is for the sign-up modal
                     <div className='sign-up-div'>
                         <h2>Sign up </h2>
                         <div className='login-name-div'>name: <input type='text' name='name' value={signupDetails.name} onChange={handleSignupInput} /></div>

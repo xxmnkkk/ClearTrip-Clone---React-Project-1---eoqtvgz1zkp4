@@ -1,8 +1,11 @@
 import { NavLink } from "react-router-dom"
 
 export default function FailureModal() {
+    // This component is for my payment error modal
     const error = sessionStorage.getItem('paymentError');
     return (
+        // Simple code for the payment error modal
+        // Ive included a failed image and some texts regarding the failed process and proceed link to the homepage.
         <div className="failure-modal-container">
             <div className="failure-modal">
                 <div className="failure-image">

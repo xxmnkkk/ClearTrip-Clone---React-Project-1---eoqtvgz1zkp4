@@ -1,11 +1,54 @@
+import axios from "axios"
+import { useEffect, useState } from "react"
+
+// Very basic code for some card images that is being displayed on the right side of the mainpage
 export default function Card() {
+    const [offerData, setOfferData] = useState();
+    console.log("Offer data: ", offerData)
+
+    const [currentIndex, setCurrentIndex] = useState(0);
+console.log("current index: ", currentIndex);
+    useEffect(() => {
+        const config = {
+            headers: {
+                projectId: "f104bi07c490"
+            }
+        }
+
+        axios.get("https://academics.newtonschool.co/api/v1/bookingportals/offers", config)
+            .then((response) => {
+                // console.log(response.data.data.offers)
+                setOfferData(response.data.data.offers)
+            })
+            .catch((error) => {
+                console.log("Offer error: ", error)
+            });
+    }, []);
+
+    useEffect(() => {
+        const nextIndex = (currentIndex + 1) % offerData?.length;
+
+        const timeout = setTimeout(() => {
+            setCurrentIndex(nextIndex);
+        }, 10000);
+
+        return () => {
+            clearTimeout(timeout);
+        };
+    }, [currentIndex, offerData])
+
     return (
         <div className='adds-div'>
-            <div class="card-container">
-                <p class="card-title">No Cost EMI Offers!</p>
-                <p class="card-description">Pay Interest Free EMI with HDFC, ICICI, SBI, AXIS, KOTAK Bank Cards!</p>
-                <a href="https://www.cleartrip.com/offers/india/avail-3-months-no-cost-emi-on-all-leading-bank-credit-cards" class="know-more">Know more</a>
-            </div>
+            {offerData && offerData.map((data, index) => (
+                <div className={`${currentIndex === index ? "card-container-block" : "card-container-none"}`} key={index}>
+                    <div className="card-container">
+                        <p className="card-title">{data.offerPersuasion}</p>
+                        <p className="card-description">{data.pTl}</p>
+                        <p className="card-description">{data.pTx}</p>
+                    </div>
+                </div>
+            ))}
+
 
             <div class="card-container-img">
                 <div class="image-container">

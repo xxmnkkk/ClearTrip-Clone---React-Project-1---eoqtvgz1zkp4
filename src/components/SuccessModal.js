@@ -1,8 +1,10 @@
 import { NavLink } from "react-router-dom"
 
 export default function SuccessModal() {
-
+    // This is my component for payment success modal
     return (
+        // Here ive included one success image for showing the user that the payment was successfull
+        // Also ive included some text's and a link to navigate the user to the my trips page where the user can see his bookings
         <div className="success-modal-container">
             <div className="success-modal">
                 <div className="success-image">

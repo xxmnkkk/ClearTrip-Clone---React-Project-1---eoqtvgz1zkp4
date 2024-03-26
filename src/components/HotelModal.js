@@ -8,26 +8,26 @@ import { ImManWoman } from 'react-icons/im';
 import { LiaDogSolid, LiaSmokingSolid, LiaBedSolid } from 'react-icons/lia';
 import { TbLocationCheck } from 'react-icons/tb';
 import { IoPricetagsOutline } from 'react-icons/io5';
-import { NavLink, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 function HotelModal() {
-    const { selectedRoom, setSelectedRoom , hotelDetail , setHotelDetail , setLoginModal , isLoggedIn , selectedHotelData, setSelectedHotelData} = useContext(AuthContext);
+    // Here im again importing the states that i want to use
+    const { setSelectedRoom, setHotelDetail, setLoginModal, isLoggedIn, selectedHotelData, setSelectedHotelData, selectedHotel } = useContext(AuthContext);
 
-    const { selectedHotel } = useContext(AuthContext);
+    // Here ive defined some local states to manage loading, error, currentimage index for slideshow
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
-    const images = selectedHotelData.images || [];
 
-    console.log(selectedHotel);
-    console.log("selected hotel data: ", selectedHotelData);
+    // Here inside images im storing the images data if present otherwise im storing null
+    const images = selectedHotelData?.images || [];
 
+    // Here ive defined roomOptionsRef so that on click of a button i can scroll the screen to desired section
     const roomOptionsRef = useRef(null);
+
     const navigate = useNavigate();
 
-    console.log("selected room: ", selectedRoom);
-    console.log("selected room hote and location: ", hotelDetail.name, hotelDetail.location)
-
+    // Inside of the useEffect im calling the api for the selected hotel and storing the data inside of the state
     useEffect(() => {
         const config = {
             headers: {
@@ -48,37 +48,46 @@ function HotelModal() {
             });
     }, [selectedHotel]);
 
+    // Below im performing the function of automatic image slideshow
     useEffect(() => {
         const nextImage = (currentImageIndex + 1) % images.length;
         const interval = setInterval(() => {
             setCurrentImageIndex(nextImage);
-        }, 10000);
+        }, 3000);
 
         return () => {
             clearInterval(interval);
         };
     }, [currentImageIndex, images]);
 
+    // Loading in the loading div if true
     if (loading) {
         return <div className="api-loading"></div>;
     }
 
+    // Loading in the error div if true
     if (error) {
         return <div className="api-error"></div>;
     }
 
+    // This function on click of the select room button scrolls the screen to rooms section 
     const handleScrollToRoomOptions = () => {
         roomOptionsRef.current.scrollIntoView({ behavior: 'smooth' });
     };
 
+    // This function handles the click of the book button inn rooms section
     const handleBookRoom = (room) => {
+        // Setting the selected room inside of the state
         setSelectedRoom(room);
+
+        // Setting some information about the hotel details 
         setHotelDetail({
             name: selectedHotelData.name,
             location: selectedHotelData.location,
             rating: selectedHotelData.rating
         })
 
+        // Performing the authentication here and navigating the user to checkout page
         if (isLoggedIn) {
             navigate("/checkout")
         } else {
@@ -87,8 +96,10 @@ function HotelModal() {
     };
 
     return (
+        // Code for the ui of selected hotel booking page
         <div className="selected-hotel-container">
             <div className="selected-hotel-info-img">
+                {/* This div shows up information about the hotel on the screen */}
                 <div className="selected-hotel-info-container">
                     <div className="selected-hotel-name">
                         {selectedHotelData.name}
@@ -164,9 +175,12 @@ function HotelModal() {
                         </div>
                     </div>
                 </div>
+
+                {/* This div displays the images of the selected hotel and select room button */}
                 <div className="selected-hotel-image-and-add-container">
+                    {/* Here im mapping out the image data */}
                     <div className="selected-hotel-image-container">
-                        {images.map((image, index) => (
+                        {images?.map((image, index) => (
                             <img
                                 key={index}
                                 src={image}
@@ -181,6 +195,7 @@ function HotelModal() {
                 </div>
             </div>
 
+            {/* This code is for displaying a map, what ive done here is just loaded up a google maps iframe */}
             <div className="map">
                 Location
                 <iframe
@@ -195,6 +210,7 @@ function HotelModal() {
                 ></iframe>
             </div>
 
+            {/* This div contains some reviews from other users about the hotel. This data is static */}
             <div className="selected-hotel-review-container">
                 <span>Reviews</span>
                 <div className="selected-hotel-reviews">
@@ -226,6 +242,7 @@ function HotelModal() {
                 </div>
             </div>
 
+            {/* This div maps out the room data */}
             <div ref={roomOptionsRef} className="selected-hotel-room-options">
                 <span>Select Room</span>
                 <div className="selected-hotel-room-container">

@@ -2,16 +2,22 @@ import React, { useContext, useState } from "react";
 import { CiLocationOn, CiUser } from 'react-icons/ci';
 import DateSelector from "./DateSelector";
 import { AiOutlinePlusCircle, AiOutlineMinusCircle } from 'react-icons/ai';
-import { NavLink, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { AuthContext } from "./App";
 
-function HotelBookingSection() {
-    const [hotelLocation, setHotelLocation] = useState("");
+// An array with hotel names
+const hotelLocationArray = ['Nagpur, Maharashtra', 'Jodhpur, Rajasthan', 'Amritsar, Punjab', 'Bhopal, Madhya Pradesh', 'Patna, Bihar', 'Kalyan-Dombivali, Maharashtra', 'Hyderabad, Telangana', 'Bangalore, Karnataka', 'Pimpri-Chinchwad, Maharashtra', 'Mumbai, Maharashtra', 'Pune, Maharashtra', 'Kanpur, Uttar Pradesh', 'Visakhapatnam, Andhra Pradesh', 'Nashik, Maharashtra', 'Srinagar, Jammu and Kashmir', 'Meerut, Uttar Pradesh', 'Coimbatore, Tamil Nadu', 'Vijayawada, Andhra Pradesh', 'Chennai, Tamil Nadu', 'Agra, Uttar Pradesh'];
 
-    const { hiddenDiv, setHiddenDiv , hotelLocationHiddenDiv, setHotelLocationHiddenDiv , isLoggedIn, setLoginModal, updateHotelLocation , roomCount, setRoomCount , hotelAdultCount, setHotelAdultCount , hotelChildCount, setHotelChildCount , setShowDate} = useContext(AuthContext);
+function HotelBookingSection() {
+    // Here im importing my states and also defining local state
+    const [hotelLocation, setHotelLocation] = useState("");
+    const { hiddenDiv, setHiddenDiv, hotelLocationHiddenDiv, setHotelLocationHiddenDiv, updateHotelLocation, roomCount, setRoomCount, hotelAdultCount, setHotelAdultCount, hotelChildCount, setHotelChildCount, setShowDate } = useContext(AuthContext);
+
     const navigate = useNavigate();
+
     console.log(hotelLocationArray);
 
+    // This function basically updates the count of adult, child and room.
     const updateCount = (type, action) => {
         if (action === 'increment') {
             if (type === 'adult') {
@@ -32,25 +38,21 @@ function HotelBookingSection() {
         }
     };
 
-    const hotelLocationArray = ['Nagpur, Maharashtra', 'Jodhpur, Rajasthan', 'Amritsar, Punjab', 'Bhopal, Madhya Pradesh', 'Patna, Bihar', 'Kalyan-Dombivali, Maharashtra', 'Hyderabad, Telangana', 'Bangalore, Karnataka', 'Pimpri-Chinchwad, Maharashtra', 'Mumbai, Maharashtra', 'Pune, Maharashtra', 'Kanpur, Uttar Pradesh', 'Visakhapatnam, Andhra Pradesh', 'Nashik, Maharashtra', 'Srinagar, Jammu and Kashmir', 'Meerut, Uttar Pradesh', 'Coimbatore, Tamil Nadu', 'Vijayawada, Andhra Pradesh', 'Chennai, Tamil Nadu', 'Agra, Uttar Pradesh'];
-
+    // This function handles the click for guest counts and room counts selector
     const handleGuests = () => {
         setHiddenDiv(!hiddenDiv);
         setHotelLocationHiddenDiv(false);
         setShowDate(false);
     }
 
-    // const handelHotelInputChange = (e) => {
-    //     const value = e.target.value;
-    //     updateHotelLocation(value);
-    // }
-
+    // This function handles the click for location dropdown selector
     const openHotelLocationDropdownModal = () => {
         setHotelLocationHiddenDiv(!hotelLocationHiddenDiv);
         setHiddenDiv(false);
         setShowDate(false);
     }
 
+    // This function basically updates whatver location is selected inside of the button
     const handleLocationClick = (location) => {
         setHotelLocation(location);
         setHotelLocationHiddenDiv(false);
@@ -58,11 +60,14 @@ function HotelBookingSection() {
     }
 
     return (
+        // Some basic code for the ui of hotel booking section ui
         <div className="hotel-booking-section">
             <div className="hotel-text-content">
                 <h1>Search Hotels</h1>
                 <p>Enjoy hassle free bookings with Cleartrip</p>
             </div>
+
+            {/* Here im creating a location selector button which opens a hidden loacation selector div */}
             <div className="hotel-booking-sub-section">
                 <div className="hotel-name">
                     <CiLocationOn className="hotel-location-icon" />
@@ -85,11 +90,10 @@ function HotelBookingSection() {
                                 {location}
                             </div>
                         ))}
-                        {/* <div className="hotel-location-text"></div> */}
                     </div>
                 )}
 
-
+                {/* Code for guest and room count selector button */}
                 <div className="hotel-date-room-section">
                     <DateSelector />
                     <div className="hotel-guest-section">
@@ -139,6 +143,8 @@ function HotelBookingSection() {
                     </div>
                 </div>
             </div>
+
+            {/* A simple hotel search button which navigated us to a page with hotel list */}
             <div className="search-hotel-button-container">
                 <div className='search-hotels-button' onClick={() => navigate('/hotel')}>
                     <span>Search hotels</span>

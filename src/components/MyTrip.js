@@ -6,13 +6,10 @@ import { NavLink } from "react-router-dom";
 
 export default function MyTrip() {
     const { setPaymentSuccessDiv } = useContext(AuthContext);
-
-    const [flightID, setFlightID] = useState();
-    const [flightData, setFlightData] = useState();
-    console.log(flightID)
+    const [bookingData, setBookingData] = useState();
     const [showPassword, setShowPassword] = useState(false);
 
-    console.log(flightData);
+    console.log("Booking data: ", bookingData);
 
     useEffect(() => {
         setPaymentSuccessDiv(false);
@@ -30,51 +27,8 @@ export default function MyTrip() {
 
         axios.get("https://academics.newtonschool.co/api/v1/bookingportals/booking", config)
             .then((response) => {
-                console.log(response);
-
-                const userBookingDetails = JSON.parse(localStorage.getItem(`${userName}_bookingDetails`));
-                console.log("Booking details: ", userBookingDetails)
-                setFlightData(userBookingDetails);
-
-                // const flightData = response.data.data.map((entry) => ({
-                //     bookingType: entry.booking_type,
-                //     flightId: entry._id,
-                //     startDate: entry.start_date,
-                //     endDate: entry.end_date
-                // }))
-
-                // flightData.forEach((flight) => {
-                //     const { flightId, startDate, endDate } = flight;
-
-                //     axios.get(`https://academics.newtonschool.co/api/v1/bookingportals/flight/${flightId}`, {
-                //         headers: {
-                //             projectID: "f104bi07c490"
-                //         }
-                //     })
-                //         .then((flightDetailsResponse) => {
-                //             console.log(`Flight ID: ${flightId}, Start Date: ${startDate}, End Date: ${endDate}`);
-                //             console.log('Flight Details:', flightDetailsResponse.data);
-                //         })
-                //         .catch((error) => {
-                //             console.error(`Error fetching data for Flight ID ${flightId}:`, error.message);
-                //         });
-                // })
-
-                // let updatedFlightData = [];
-
-                // flightData.forEach((flight) => {
-                //     const flightId = flight.flightId;
-                //     const flightInformation = localStorage.getItem(`flightData_${flightId}`);
-
-                //     if (flightInformation) {
-                //         const parsedFlightData = JSON.parse(flightInformation);
-                //         updatedFlightData.push(parsedFlightData);
-                //     } else {
-                //         console.log(`Flight data not found for flight ID ${flightId}`);
-                //     }
-                // });
-
-                // setFlightData(updatedFlightData);
+                console.log(response.data.data);
+                setBookingData(response.data.data);
             })
             .catch((error) => {
                 console.log(error);
@@ -86,28 +40,6 @@ export default function MyTrip() {
     const loggedInUser = JSON.parse(loggedInUserString);
     const { email, password } = loggedInUser;
 
-    // if(flightID){
-    //     let updatedFlightData = [];
-
-    //     flightID.forEach((flight) => {
-    //         const flightId = flight.flightId;
-    //         const flightInformation = localStorage.getItem(`flightData_${flightId}`);
-
-    //         if (flightInformation) {
-    //             const parsedFlightData = JSON.parse(flightInformation);
-
-    //             updatedFlightData.push(parsedFlightData);
-    //         } else {
-    //             console.log(`Flight data not found for flight ID ${flightId}`);
-    //         }
-    //     });
-
-    //     setFlightData(updatedFlightData);
-    // }
-    // else{
-    //     console.log("No flight data");
-    // }
-
     return (
         <div className="mytrip-container">
             <div className="mytrip-welcome-info-section">
@@ -117,57 +49,94 @@ export default function MyTrip() {
 
             <div className="mytrip-mytrip-content-and-profile-section">
                 <div className="mytrip-info-div">
-                    {flightData ? flightData.map((innerArray, index) => (
+                    {bookingData && bookingData.map((booking, index) => (
                         <div key={index} className="mytrip-flight-card">
-                            {innerArray.map((flight) => (
-                                <div key={flight._id} className="mytrip-flight-card-section">
+                            {booking.booking_type === "flight" ? (
+                                <div key={booking.flight._id} className="mytrip-flight-card-section">
                                     <div className="mytrip-logo-section">
                                         <img src="https://images.jdmagicbox.com/comp/delhi/c9/011pxx11.xx11.171229170107.e6c9/catalogue/indigo-air-cargo-services-mahipalpur-extension-delhi-cargo-services-i9owvibyd4.jpg" />
                                         <span>IndiGo</span>
-                                        <p>{flight.flightID.slice(0, 5)}</p>
+                                        <p>{booking.flight.flightID.slice(0, 5)}</p>
                                     </div>
 
                                     <div className="mytrip-flight-info">
                                         <div className="mytrip-srcdes">
-                                            <p>{flight.source}</p>
-                                            <span>{flight.departureTime}</span>
+                                            <p>{booking.flight.source}</p>
+                                            <span>{booking.flight.departureTime}</span>
                                         </div>
                                         <div>
-                                            <div class="flight-duration-and-stop-container">
-                                                <div class="flight-hours">{flight.duration} hr</div>
-                                                <div class="flight-line-break"></div>
-                                                <div class="flight-stop-text">{flight.stops} stop</div>
+                                            <div className="flight-duration-and-stop-container">
+                                                <div className="flight-hours">{booking.flight.duration} hr</div>
+                                                <div className="flight-line-break"></div>
+                                                <div className="flight-stop-text">{booking.flight.stops} stop</div>
                                             </div>
                                         </div>
                                         <div className="mytrip-srcdes">
-                                            <p>{flight.destination}</p>
-                                            <span>{flight.arrivalTime}</span>
+                                            <p>{booking.flight.destination}</p>
+                                            <span>{booking.flight.arrivalTime}</span>
                                         </div>
                                     </div>
 
-                                    <div class="hidden-flight-excess-information">
-                                        <div class="hidden-flight-excess-text">
+                                    <div className="hidden-flight-excess-information">
+                                        <div className="hidden-flight-excess-text">
                                             Check-in baggage <span>15kg(1 piece) / adult</span></div>
-                                        <div class="hidden-flight-excess-text">
+                                        <div className="hidden-flight-excess-text">
                                             Cabin baggage <span>7kg / adult</span></div>
-                                        <div class="hidden-flight-excess-text-amenities">
-                                            <p>In-flight entertainment</p><p>Complimentary beverage</p>
+                                        <div className="hidden-flight-excess-text-amenities">
+                                            <p>In-flight entertainment</p><p>Complimentary beverage</p><p>Booked on: {booking.created_at.substring(0, 10)}</p>
                                         </div>
                                     </div>
                                 </div>
-                            ))}
-                        </div>
-                    ))
-                        :
+                            ) :
+                                <div key={booking._id} className="mytrip-flight-card-section">
+                                    <div className="mytrip-logo-section">
+                                        <img src="https://images.unsplash.com/photo-1496417263034-38ec4f0b665a?q=80&w=3271&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" />
+                                        <span>{booking.hotel.name}</span>
+                                        <p>{booking.hotel.location}</p>
+                                    </div>
 
+                                    <div className="mytrip-flight-info">
+                                        <div className="mytrip-srcdes">
+                                            {/* <p>{booking.flight.source}</p> */}
+                                            {/* <span>{booking.flight.departureTime}</span> */}
+                                        </div>
+                                        <div>
+                                            <div className="flight-duration-and-stop-container">
+                                                {/* <div className="flight-hours">{booking.flight.duration} hr</div> */}
+                                                {/* <div className="flight-line-break"></div> */}
+                                                {/* <div className="flight-stop-text">{booking.flight.stops} stop</div> */}
+                                            </div>
+                                        </div>
+                                        <div className="mytrip-srcdes">
+                                            {/* <p>{booking.flight.destination}</p> */}
+                                            {/* <span>{booking.flight.arrivalTime}</span> */}
+                                        </div>
+                                    </div>
+
+                                    <div className="hidden-flight-excess-information">
+                                        <div className="hidden-flight-excess-text">
+                                            Check-in prior <span>One hour</span></div>
+                                        <div className="hidden-flight-excess-text">
+                                            Meal's Included <span>Breakfast/Lunch/Dinner</span></div>
+                                        <div className="hidden-flight-excess-text-amenities">
+                                            <p>Booked on: {booking.created_at.substring(0, 10)}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    ))}
+
+
+
+                    {!bookingData && (
                         <div className="mytrip-home-button-container">
                             <p>You currently have no bookings associated to your account. To book flights or hotels, click the home button below.</p>
                             <NavLink to="/main" className="mytrip-navlink">
                                 <button className="mytrip-home-button">HOME</button>
                             </NavLink>
                         </div>
-
-                    }
+                    )}
                 </div>
 
                 <div className="mytrip-profile-div">
@@ -198,3 +167,6 @@ export default function MyTrip() {
         </div>
     )
 }
+
+
+

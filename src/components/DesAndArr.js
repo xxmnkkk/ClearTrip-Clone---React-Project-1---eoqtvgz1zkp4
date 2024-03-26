@@ -2,6 +2,7 @@ import React, { useState, useContext } from "react";
 import { GiAirplaneDeparture, GiAirplaneArrival } from 'react-icons/gi';
 import { AuthContext } from "./App";
 
+// An array of objects defining airports location and code
 const airports = [
     { "code": "BLR", "location": "Bangalore, IN - Kempegowda International Airport" },
     { "code": "BOM", "location": "Mumbai, IN - Chatrapati Shivaji Airport" },
@@ -13,25 +14,29 @@ const airports = [
 ]
 
 export default function DesAndArr() {
-
+    // Here im importing all the state that i want to use inside of this component .
     const { departure, arrival, updateDeparture, updateArrival, flightDepartureHiddenDiv, setFlightDepartureHiddenDiv, flightArrivalHiddenDiv, setFlightArrivalHiddenDiv, setIsActive, setIsActivePassanger, setShowDate } = useContext(AuthContext);
 
-    const handleDepartureInputChange = () => {
+    // Functio for handling departure input change
+    const handleDepartureInputChange = (e) => {
         const value = e.target.value;
         updateDeparture(value);
     };
 
-    const handleArrivalInputChange = () => {
+    // function for handling arrival input change
+    const handleArrivalInputChange = (e) => {
         const value = e.target.value;
         updateArrival(value);
     };
 
+    // This function handles the task of swapping the values 
     const swapDepartureAndArrival = () => {
         const temp = departure;
         updateDeparture(arrival);
         updateArrival(temp);
     };
 
+    // This function handles the click of departure button which opens a location selector modal
     const handleFlightDepartureHiddenDiv = () => {
         setFlightDepartureHiddenDiv(!flightDepartureHiddenDiv);
 
@@ -44,6 +49,7 @@ export default function DesAndArr() {
         setShowDate(false);
     }
 
+    // This function handles the click of arrival button which opens a location selector modal
     const handleFlightArrivalHiddenDiv = () => {
         setFlightArrivalHiddenDiv(!flightArrivalHiddenDiv);
 
@@ -56,6 +62,7 @@ export default function DesAndArr() {
         setShowDate(false);
     }
 
+    // The below two functions basically updated the location selected inside of the hidden divs straight to the departure/arrival buttons respectively.
     const HandleDepartureHiddenDivClick = (e) => {
         const airportCode = e.currentTarget.getAttribute('data-airport-code');
         updateDeparture(airportCode);
@@ -69,6 +76,7 @@ export default function DesAndArr() {
     };
 
     return (
+        // Very basic code for the ui of buttons
         <div className='flight-des-arr-div'>
             <div className='dep-arr departure'>
                 <GiAirplaneDeparture className='dep-arr-icon' />

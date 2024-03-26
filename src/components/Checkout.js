@@ -12,19 +12,14 @@ import { RiFlightLandLine, RiFlightTakeoffFill } from "react-icons/ri";
 import { SlCalender } from "react-icons/sl";
 import { GiReturnArrow } from "react-icons/gi";
 
-
-
-
 export default function Checkout() {
-    const { selectedRoom, selectedHotelData, selectedFlightData, roomCount, calenderDateDifference, startDate, endDate, flightDay, flightDayTwo, flightClass, adultCount, childCount, infantCount, hotelAdultCount, hotelChildCount, fareType , setRoundFlightDetailsDiv} = useContext(AuthContext);
+    // Here im importing states that i want to use inside of this component
+    const { selectedRoom, selectedHotelData, selectedFlightData, roomCount, calenderDateDifference, startDate, endDate, flightDay, flightDayTwo, flightClass, adultCount, childCount, infantCount, hotelAdultCount, hotelChildCount, fareType, setRoundFlightDetailsDiv } = useContext(AuthContext);
 
-    // console.log("start date: ",startDate );
-    // console.log("end date: ", endDate);
-    // console.log("day: ", flightDay);
-    // console.log("day2: ", flightDayTwo);
-
+    // If the user clicks the book button from the round flight modal then im just setting that off here
     setRoundFlightDetailsDiv(false);
 
+    // This function sets default values for gender, firstName, and lastName.
     const getEmptyPassenger = () => {
         return {
             gender: "Mr.",
@@ -33,46 +28,47 @@ export default function Checkout() {
         };
     };
 
+    // Here im creating two states where im creating array of respective size and filling them with dafault values using the above function
     const [hotelPassengerDetails, setHotelPassengerDetails] = useState(Array(hotelAdultCount).fill(getEmptyPassenger()));
     const [flightPassengerDetails, setFlightPassengerDetails] = useState(Array(adultCount).fill(getEmptyPassenger()));
+
+    // Here im creating states for managing some other user inputs
     const [phone, setPhone] = useState("");
     const [email, setEmail] = useState("");
     const [termsChecked, setTermsChecked] = useState(false);
-    const [error, setError] = useState("");
 
+    // Here ive created a state to store the error message while proceeding
+    const [error, setError] = useState("");
     const [cancellationDiv, setCancellationDiv] = useState(false);
-    const [flightFareTo, setFlightFareTo] = useState(false);
-    const [flightFareBack, setFlightFareBack] = useState(false);
 
     const navigate = useNavigate();
 
-    // console.log(selectedRoom);
-    // console.log(selectedHotelData);
-
-    // console.log("hotel passanger details: ", hotelPassengerDetails);
-    // console.log("flight passanger details: ", flightPassengerDetails);
-    // console.log("flight length: ", selectedFlightData.length);
-    console.log("Selected flight data: ", selectedFlightData);
-
+    // This function is called on the click of the continue button
     const handleContinue = () => {
+        // Here im calling the validateForm function and storing the response inside of the isValid
         const isValid = validateForm();
+
+        // And then im conditionally applying the logic for setting the error and navigating the user to the payment page
         if (!isValid) {
             setError("Please fill in all required fields and accept the terms and conditions.");
         } else {
-            // setError("Success");
             navigate('/payment');
         }
     };
 
+    // This function checks if there is any empty input fields
     const hasEmptyField = (passenger) => {
+        // Here im excluding the gender selection field
         const fieldsToExclude = ['gender'];
 
+        // Here im checking for all the keys if any of them have empty value
         return Object.keys(passenger).some(
+            // Im checking if it does not include fieldsToExclude and if there is any empty value 
             (field) => !fieldsToExclude.includes(field) && passenger[field].trim() === ""
         );
     };
 
-
+    // This function checks for if there is any input empty and returns boolean values
     const validateForm = () => {
         if (
             hotelPassengerDetails.some(hasEmptyField) ||
@@ -81,15 +77,19 @@ export default function Checkout() {
             email.trim() === "" ||
             !termsChecked
         ) {
+            // If false it proceeds to the handleContinue function and sets the error and the message is displayed on the screen
             return false;
         }
 
         return true;
     };
 
+    // This function handles updating the hotel passanger details
     const updateHotelPassengerDetails = (index, field, value) => {
         setHotelPassengerDetails((prevDetails) => {
+            // im making the copy of previous details so that the original array is not modified
             const updatedDetails = [...prevDetails];
+            // Here im updating the details at a specific index that is passed as a parameter
             updatedDetails[index] = {
                 ...updatedDetails[index],
                 [field]: value,
@@ -98,9 +98,12 @@ export default function Checkout() {
         });
     };
 
+    // This function handles updating the flight passanger details
     const updateFlightPassengerDetails = (index, field, value) => {
         setFlightPassengerDetails((prevDetails) => {
+            // im making the copy of previous details so that the original array is not modified
             const updatedDetails = [...prevDetails];
+            // Here im updating the details at a specific index that is passed as a parameter
             updatedDetails[index] = {
                 ...updatedDetails[index],
                 [field]: value,
@@ -112,7 +115,10 @@ export default function Checkout() {
     return (
         <div className="checkout-container">
             <div className="review-your-itinerary">
+                {/* This section of code is for reviewing the itinerary */}
                 <h1><TbCircleNumber1 /> Review your itinerary</h1>
+
+                {/* Here im checking if the data is present and just mapping it out */}
                 {selectedHotelData && selectedRoom && selectedRoom.costDetails && (
                     <>
                         <div className="checkout-hotel-card">
@@ -139,6 +145,8 @@ export default function Checkout() {
                                 <div className="checkout-price-text">
                                     <IoPricetagsOutline /> {selectedRoom.costDetails?.baseCost} rupees per night / room (without taxes and fees)
                                 </div>
+
+                                {/* Here ive calculated the total price based on this logic */}
                                 <div className="checkout-final-price-text">
                                     Total Price: {(selectedRoom.costDetails?.baseCost + selectedRoom.costDetails?.taxesAndFees - selectedRoom.costDetails?.discount) * roomCount * (calenderDateDifference === 0 ? 1 : calenderDateDifference)} rupees
                                 </div>
@@ -148,6 +156,7 @@ export default function Checkout() {
                 )}
 
                 <div className="checkout-flight-break">
+                    {/* Here im checking if the data is present and just mapping it out */}
                     {selectedFlightData && selectedFlightData.length === 1 &&
                         <>
                             <div className="checkout-flight-card">
@@ -191,6 +200,7 @@ export default function Checkout() {
                                 </div>
                             </div>
 
+                            {/* This section is for the flight info section showing the rules and regulations, */}
                             <div className="selected-flight-fare-section">
                                 <div className="flight-fare-heading">
                                     <RiFlightTakeoffFill /> {selectedFlightData[0].source} <FaArrowRightLong /> {selectedFlightData[0].destination} : {fareType}
@@ -236,6 +246,7 @@ export default function Checkout() {
                         </>
                     }
 
+                    {/* Here im checking if the data is present for the round trip flight and just mapping it out */}
                     {selectedFlightData && selectedFlightData.length === 2 && (
                         <>
                             <div className="checkout-flight-card">
@@ -325,7 +336,7 @@ export default function Checkout() {
                                     <div className="round-fare-heading">
                                         <RiFlightTakeoffFill /> {selectedFlightData[0].source} <FaArrowRightLong /> {selectedFlightData[0].destination} : {fareType}
                                     </div>
-                                    <GiReturnArrow className="fare-return-icon"/>
+                                    <GiReturnArrow className="fare-return-icon" />
                                     <div className="round-fare-heading">
                                         <RiFlightLandLine /> {selectedFlightData[1].source} <FaArrowRightLong /> {selectedFlightData[1].destination} : {fareType}
                                     </div>
@@ -393,8 +404,10 @@ export default function Checkout() {
 
                 <hr />
 
+                {/* Inside of this section im taking in the input for the passanger */}
                 <h1><TbCircleNumber2 /> Passanger details</h1>
                 <div className="checkout-passanger-detail-container">
+                    {/* The below section takes in input for the hotel adult count */}
                     {hotelAdultCount > 0 && <div className="passanger-title">Enter details of adult guest</div>}
                     {[...Array(hotelAdultCount)].map((_, index) => (
                         <div key={`adult-${index + 1}`} className="passanger-detail-card">
@@ -423,6 +436,7 @@ export default function Checkout() {
                         </div>
                     ))}
 
+                    {/* The below section takes in input for the hotel child count */}
                     {hotelChildCount > 0 && <div className="passanger-title">Enter details of child guest</div>}
                     {[...Array(hotelChildCount)].map((_, index) => (
                         <div key={`adult-${index + 1}`} className="passanger-detail-card">
@@ -451,6 +465,7 @@ export default function Checkout() {
                         </div>
                     ))}
 
+                    {/* The below section takes in input for the flight adult count */}
                     {adultCount > 0 && <div className="passanger-title">Enter details of adult passenger</div>}
                     {[...Array(adultCount)].map((_, index) => (
                         <div key={`adult-${index + 1}`} className="passanger-detail-card">
@@ -479,6 +494,7 @@ export default function Checkout() {
                         </div>
                     ))}
 
+                    {/* The below section takes in input for the flight child count */}
                     {childCount > 0 && <div className="passanger-title">Enter details of child passenger</div>}
                     {[...Array(childCount)].map((_, index) => (
                         <div key={`child-${index + 1}`} className="passanger-detail-card">
@@ -507,6 +523,7 @@ export default function Checkout() {
                         </div>
                     ))}
 
+                    {/* The below section takes in input for the flight infant count */}
                     {infantCount > 0 && <div className="passanger-title">Enter details of infant passenger</div>}
                     {[...Array(infantCount)].map((_, index) => (
                         <div key={`infant-${index + 1}`} className="passanger-detail-card">
@@ -539,6 +556,7 @@ export default function Checkout() {
 
                 <hr />
 
+                {/* Here im taking inputs for contact details */}
                 <div className="heading-three-div">
                     <TbCircleNumber3 className="heading-3-icon" />
                     <div>
@@ -573,6 +591,7 @@ export default function Checkout() {
 
                 <hr />
 
+                {/* Here ive created checkbox for checking if the terms and conditions are checked or not */}
                 <h1><TbCircleNumber4 /> Terms and conditions</h1>
                 <div className="checkout-terms-and-conditions">
                     <label>
@@ -586,7 +605,10 @@ export default function Checkout() {
                 </div>
 
             </div>
+
+            {/* The below div shows all the price details */}
             <div className="checkout-price-section">
+                {/* This shows the price detail for the hotel booking */}
                 {selectedHotelData && selectedRoom && selectedRoom.costDetails && (
                     <div className="checkout-hotel-price-container">
                         <div className="checkout-hotel-price-text">
@@ -611,6 +633,7 @@ export default function Checkout() {
                     </div>
                 )}
 
+                {/* This shows the price detail for the one-way flight booking */}
                 {selectedFlightData && selectedFlightData.length === 1 &&
                     <div className="checkout-Flight-price-container">
                         <div className="checkout-flight-price-info">
@@ -646,6 +669,7 @@ export default function Checkout() {
                     </div>
                 }
 
+                {/* This shows the price detail for the round-trip flight booking */}
                 {selectedFlightData && selectedFlightData.length === 2 &&
                     <div className="checkout-Flight-price-container">
                         <div className="checkout-flight-price-info">
@@ -691,8 +715,10 @@ export default function Checkout() {
                     </div>
                 }
 
+                {/* This is the continue button which calls the handleContinue function */}
                 <div className="checkout-continue-button" onClick={handleContinue}>Continue</div>
 
+                {/* Here im loading up my error div if there is any error present while proceeding */}
                 {error && <div className="checkout-error">{error}</div>}
             </div>
         </div>

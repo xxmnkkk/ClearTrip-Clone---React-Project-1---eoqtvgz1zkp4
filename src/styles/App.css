@@ -66,10 +66,15 @@
 /* CSS for aligning main content and seide nav*/
 .cleartrip-nav-and-content-section {
   position: relative;
-  display: grid;
-  grid-template-columns: 1fr 60% 1fr;
-  gap: 0;
+  /* display: grid; */
+  /* grid-template-columns: 1fr 60% 1fr; */
+  /* gap: 0; */
   height: 650px;
+
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 0 40px;
 }
 
 /* CSS for the Side Navigation bar on home page */
@@ -82,6 +87,9 @@
   align-self: start;
   padding: 20px;
   margin-left: 40px;
+
+  position: relative;
+  width: 15%;
 }
 
 
@@ -113,6 +121,10 @@
 
 #side-nav-bar .side-nav-bar-button.active {
   background-color: #D6E8FC;
+}
+
+#side-nav-bar .side-nav-bar-button-not{
+  cursor: not-allowed;
 }
 
 /* CSS for flight booking section */
@@ -464,6 +476,10 @@
 }
 
 /* CSS for Card Container */
+.card-container-none{
+  display: none;
+}
+
 .card-container {
   display: flex;
   flex-direction: column;
@@ -474,6 +490,10 @@
   padding: 20px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   margin: 10px;
+}
+
+.card-container-block{
+  display: block;
 }
 
 .card-title {
@@ -542,7 +562,7 @@
   border: 1px solid #E6E6E6;
   box-shadow: 0 0 5px 0.5px lightgrey;
   border-radius: 15px;
-  width: 80%;
+  width: 600px;
   display: flex;
   flex-direction: column;
   gap: 40px;
