@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState , useEffect} from "react";
 import { CiLocationOn, CiUser } from 'react-icons/ci';
 import DateSelector from "./DateSelector";
 import { AiOutlinePlusCircle, AiOutlineMinusCircle } from 'react-icons/ai';
@@ -11,9 +11,15 @@ const hotelLocationArray = ['Nagpur, Maharashtra', 'Jodhpur, Rajasthan', 'Amrits
 function HotelBookingSection() {
     // Here im importing my states and also defining local state
     const [hotelLocation, setHotelLocation] = useState("");
-    const { hiddenDiv, setHiddenDiv, hotelLocationHiddenDiv, setHotelLocationHiddenDiv, updateHotelLocation, roomCount, setRoomCount, hotelAdultCount, setHotelAdultCount, hotelChildCount, setHotelChildCount, setShowDate } = useContext(AuthContext);
+    const { hiddenDiv, setHiddenDiv, hotelLocationHiddenDiv, setHotelLocationHiddenDiv, updateHotelLocation, roomCount, setRoomCount, hotelAdultCount, setHotelAdultCount, hotelChildCount, setHotelChildCount, setShowDate , setAdultCount , setChildCount , setInfantCount} = useContext(AuthContext);
 
     const navigate = useNavigate();
+
+    useEffect(() => {
+        setAdultCount(0)
+        setChildCount(0)
+        setInfantCount(0)
+    }, [])
 
     console.log(hotelLocationArray);
 

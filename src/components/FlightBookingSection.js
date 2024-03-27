@@ -27,7 +27,7 @@ const tripOption = [
 
 const FlightBookingSection = () => {
     // Here im importing all the state that i want to use inside of this component and also im defining additional stated like index and selectedtrip that will be used inside of this component.
-    const { isActive, setIsActive, setIsActivePassanger, setIsLoggedIn, setLoginModal, loginModal, selectedFlightTrip, setSelectedFlightTrip, setFlightDepartureHiddenDiv, setFlightArrivalHiddenDiv, setShowDate, fareType, setFareType, setPaymentFailureDiv, setRoundFlightDetailsDiv } = useContext(AuthContext);
+    const { isActive, setIsActive, setIsActivePassanger, setIsLoggedIn, setLoginModal, loginModal, selectedFlightTrip, setSelectedFlightTrip, setFlightDepartureHiddenDiv, setFlightArrivalHiddenDiv, setShowDate, fareType, setFareType, setPaymentFailureDiv, setRoundFlightDetailsDiv , setHotelAdultCount , setHotelChildCount} = useContext(AuthContext);
     const [index, setIndex] = useState(0);
     const [selectedTrip, setSelectedTrip] = useState("oneway");
 
@@ -38,6 +38,8 @@ const FlightBookingSection = () => {
         setSelectedFlightTrip(selectedTrip);
         setPaymentFailureDiv(false);
         setRoundFlightDetailsDiv(false);
+        setHotelAdultCount(0);
+        setHotelChildCount(0)
     }, [selectedTrip, setPaymentFailureDiv, setRoundFlightDetailsDiv]);
 
     console.log("Selected Trip Option print 2: ", selectedFlightTrip);

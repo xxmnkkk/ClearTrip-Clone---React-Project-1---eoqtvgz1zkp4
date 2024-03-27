@@ -2,8 +2,10 @@ import React, { useContext, useState } from 'react';
 import { AiOutlineClose } from "react-icons/ai";
 import axios from 'axios';
 import image from '../image/login-img.jpg';
+import { AuthContext } from './App';
 
 const LoginModal = ({ onClose , onLoginSuccess }) => {
+    const {setIsLoggedIn , setLoginModal} = useContext(AuthContext);
     // Here im defining my state's for storing in what form ive selected, login errors, signup errors, login details, signup details.
     const [activeForm, setActiveForm] = useState('sign-in');
     const [loginError, setLoginError] = useState('');
@@ -83,28 +85,42 @@ const LoginModal = ({ onClose , onLoginSuccess }) => {
     const handleSignup = (e) => {
         e.preventDefault();
         console.log('Signup details:', signupDetails);
-        
-        const config = {
-            headers: {
-                "Content-type" : "application/json",
-                "projectID" : "f104bi07c490",
+
+        if(signupDetails.password !== ''){
+            const config = {
+                headers: {
+                    "Content-type" : "application/json",
+                    "projectID" : "f104bi07c490",
+                }
             }
+    
+            axios.post("https://academics.newtonschool.co/api/v1/bookingportals/signup", {...signupDetails , appType: "bookingportals"} , config)
+            .then((response) => {
+                console.log("signup data response: " , response.data)
+    
+                // Same steps but limited like the login form
+                if (response.data.token) {
+                    sessionStorage.setItem("userToken", response.data.token);
+                    sessionStorage.setItem("loggedInUser", JSON.stringify(signupDetails));
+                    localStorage.setItem(`newUser_${signupDetails.email}`, JSON.stringify(signupDetails)); 
+                    sessionStorage.setItem('loggedInUserName', signupDetails.name)
+                    setLoginModal(false);
+                    setIsLoggedIn(true);
+                }
+
+                // if(response.data?.user?.name){
+                //     sessionStorage.setItem('loggedInUserName', response.data.user.name)
+                //     console.log("logged in user name in login component: ", response.data.user.name);
+                // }
+            })
+            .catch((error) => {
+                console.log(error);
+                setSignupError(error.response.data.message)
+            })
         }
-
-        axios.post("https://academics.newtonschool.co/api/v1/bookingportals/signup", {...signupDetails , appType: "bookingportals"} , config)
-        .then((response) => {
-            console.log("response: " , response.data)
-
-            // Same steps but limited like the login form
-            if (response.data.token) {
-                sessionStorage.setItem("userToken", response.data.token);
-                localStorage.setItem(`newUser_${signupDetails.email}`, JSON.stringify(signupDetails)); 
-            }
-        })
-        .catch((error) => {
-            console.log(error);
-            setSignupError(error.response.data.message)
-        })
+        else{
+            setSignupError("Please fill all the fields");
+        }
     };
 
     // Here im setting in the login details inside of the state

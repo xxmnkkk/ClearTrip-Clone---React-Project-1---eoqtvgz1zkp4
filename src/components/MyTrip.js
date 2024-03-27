@@ -129,7 +129,7 @@ export default function MyTrip() {
 
 
 
-                    {!bookingData && (
+                    {bookingData?.length === 0 && (
                         <div className="mytrip-home-button-container">
                             <p>You currently have no bookings associated to your account. To book flights or hotels, click the home button below.</p>
                             <NavLink to="/main" className="mytrip-navlink">
