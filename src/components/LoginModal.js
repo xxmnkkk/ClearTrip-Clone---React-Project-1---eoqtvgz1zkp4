@@ -4,8 +4,8 @@ import axios from 'axios';
 import image from '../image/login-img.jpg';
 import { AuthContext } from './App';
 
-const LoginModal = ({ onClose , onLoginSuccess }) => {
-    const {setIsLoggedIn , setLoginModal} = useContext(AuthContext);
+const LoginModal = ({ onClose, onLoginSuccess }) => {
+    const { setIsLoggedIn, setLoginModal } = useContext(AuthContext);
     // Here im defining my state's for storing in what form ive selected, login errors, signup errors, login details, signup details.
     const [activeForm, setActiveForm] = useState('sign-in');
     const [loginError, setLoginError] = useState('');
@@ -44,41 +44,41 @@ const LoginModal = ({ onClose , onLoginSuccess }) => {
     const handleLogin = (e) => {
         e.preventDefault();
         console.log('Login details:', loginDetails);
-        
+
         const config = {
             headers: {
-                "Content-type" : "application/json",
-                "projectID" : "f104bi07c490",
+                "Content-type": "application/json",
+                "projectID": "f104bi07c490",
             }
         }
 
-        axios.post("https://academics.newtonschool.co/api/v1/bookingportals/login" , {...loginDetails, appType: "bookingportals"} , config)
-        .then((response) => {
-            console.log("response: ", response.data)
+        axios.post("https://academics.newtonschool.co/api/v1/bookingportals/login", { ...loginDetails, appType: "bookingportals" }, config)
+            .then((response) => {
+                console.log("response: ", response.data)
 
-            // If the is a token inside of the response, im setting it inside of the local storage and as well and user details. Additionally im soring the user details in local storage just for keeping tract of what accounts ive made 
-            if (response.data.token) {
-                sessionStorage.setItem("userToken", response.data.token);
-                sessionStorage.setItem("loggedInUser", JSON.stringify(loginDetails));
-                localStorage.setItem(`userDetails_${loginDetails.email}`, JSON.stringify(loginDetails)); 
-                onLoginSuccess();
-            }
+                // If the is a token inside of the response, im setting it inside of the local storage and as well and user details. Additionally im soring the user details in local storage just for keeping tract of what accounts ive made 
+                if (response.data.token) {
+                    sessionStorage.setItem("userToken", response.data.token);
+                    sessionStorage.setItem("loggedInUser", JSON.stringify(loginDetails));
+                    localStorage.setItem(`userDetails_${loginDetails.email}`, JSON.stringify(loginDetails));
+                    onLoginSuccess();
+                }
 
-            // Here im setting in the user name inside of the session storage
-            if(response.data.data.name){
-                sessionStorage.setItem('loggedInUserName', response.data.data.name)
-                console.log("logged in user name in login component: ", response.data.data.name);
-            }
+                // Here im setting in the user name inside of the session storage
+                if (response.data.data.name) {
+                    sessionStorage.setItem('loggedInUserName', response.data.data.name)
+                    console.log("logged in user name in login component: ", response.data.data.name);
+                }
 
-            // Here im setting in the user id inside of the session storage
-            if(response.data.data._id)(
-                sessionStorage.setItem("userId", response.data.data._id)
-            )
-        })
-        .catch((error) => {
-            console.log(error)
-            setLoginError(error.response.data.message)
-        })
+                // Here im setting in the user id inside of the session storage
+                if (response.data.data._id) (
+                    sessionStorage.setItem("userId", response.data.data._id)
+                )
+            })
+            .catch((error) => {
+                console.log(error)
+                setLoginError(error.response.data.message)
+            })
     };
 
     // This function handles the signup click, which calls the api with the required details
@@ -86,39 +86,39 @@ const LoginModal = ({ onClose , onLoginSuccess }) => {
         e.preventDefault();
         console.log('Signup details:', signupDetails);
 
-        if(signupDetails.password !== ''){
+        if (signupDetails.password !== '') {
             const config = {
                 headers: {
-                    "Content-type" : "application/json",
-                    "projectID" : "f104bi07c490",
+                    "Content-type": "application/json",
+                    "projectID": "f104bi07c490",
                 }
             }
-    
-            axios.post("https://academics.newtonschool.co/api/v1/bookingportals/signup", {...signupDetails , appType: "bookingportals"} , config)
-            .then((response) => {
-                console.log("signup data response: " , response.data)
-    
-                // Same steps but limited like the login form
-                if (response.data.token) {
-                    sessionStorage.setItem("userToken", response.data.token);
-                    sessionStorage.setItem("loggedInUser", JSON.stringify(signupDetails));
-                    localStorage.setItem(`newUser_${signupDetails.email}`, JSON.stringify(signupDetails)); 
-                    sessionStorage.setItem('loggedInUserName', signupDetails.name)
-                    setLoginModal(false);
-                    setIsLoggedIn(true);
-                }
 
-                // if(response.data?.user?.name){
-                //     sessionStorage.setItem('loggedInUserName', response.data.user.name)
-                //     console.log("logged in user name in login component: ", response.data.user.name);
-                // }
-            })
-            .catch((error) => {
-                console.log(error);
-                setSignupError(error.response.data.message)
-            })
+            axios.post("https://academics.newtonschool.co/api/v1/bookingportals/signup", { ...signupDetails, appType: "bookingportals" }, config)
+                .then((response) => {
+                    console.log("signup data response: ", response.data)
+
+                    // Same steps but limited like the login form
+                    if (response.data.token) {
+                        sessionStorage.setItem("userToken", response.data.token);
+                        sessionStorage.setItem("loggedInUser", JSON.stringify(signupDetails));
+                        localStorage.setItem(`newUser_${signupDetails.email}`, JSON.stringify(signupDetails));
+                        sessionStorage.setItem('loggedInUserName', signupDetails.name)
+                        setLoginModal(false);
+                        setIsLoggedIn(true);
+                    }
+
+                    // if(response.data?.user?.name){
+                    //     sessionStorage.setItem('loggedInUserName', response.data.user.name)
+                    //     console.log("logged in user name in login component: ", response.data.user.name);
+                    // }
+                })
+                .catch((error) => {
+                    console.log(error);
+                    setSignupError(error.response.data.message)
+                })
         }
-        else{
+        else {
             setSignupError("Please fill all the fields");
         }
     };
@@ -152,27 +152,73 @@ const LoginModal = ({ onClose , onLoginSuccess }) => {
 
                 {/* This from is for the login modal */}
                 {activeForm === 'sign-in' ? (
-                    <div className='sign-in-div'>
-                        <h2>Login </h2>
-                        <div className='login-name-div'>email: <input type='email' name='email' value={loginDetails.email} onChange={handleLoginInput} /></div>
-                        <div className='login-password-div'>password: <input type='password' name='password' value={loginDetails.password} onChange={handleLoginInput} /></div>
-                        <div className='signin-button-div'><button onClick={handleLogin}>Sign in</button></div>
-                        <p>New user? <span onClick={() => toggleForm('sign-up')}>Sign up now</span></p>
+                    <>
+                        {/* <div className='sign-in-div'>
+                            <h2>Login </h2>
+                            <div className='login-name-div'>email: <input type='email' name='email' value={loginDetails.email} onChange={handleLoginInput} /></div>
+                            <div className='login-password-div'>password: <input type='password' name='password' value={loginDetails.password} onChange={handleLoginInput} /></div>
+                            <div className='signin-button-div'><button onClick={handleLogin}>Sign in</button></div>
+                            <p>New user? <span onClick={() => toggleForm('sign-up')}>Sign up now</span></p>
 
-                        <div className='error-div-loginandsignup'>{loginError}</div>
-                    </div>
+                            <div className='error-div-loginandsignup'>{loginError}</div>
+                        </div>  */}
+
+                        <div className='sign-in-div'>
+
+                            <h2>Login </h2>
+                            <div className='login-input-section'>
+                                <div className='login-texts-div'>
+                                    <div className=''>EMAIL </div>
+                                    <div className=''>PASSWORD </div>
+                                </div>
+
+                                <div className='login-text-div'>
+                                    <input type='email' name='email' value={loginDetails.email} onChange={handleLoginInput} />
+                                    <input type='password' name='password' value={loginDetails.password} onChange={handleLoginInput} />
+                                </div>
+                            </div>
+
+                            <div className='signin-button-div'><button onClick={handleLogin}>Sign in</button></div>
+                            <p>New user? <span onClick={() => toggleForm('sign-up')}>Sign up now</span></p>
+                            <div className='error-div-loginandsignup'>{loginError}</div>
+                        </div>
+
+                    </>
+
                 ) : (
                     // And this code is for the sign-up modal
+                    // <div className='sign-up-div'>
+                    //     <h2>Sign up </h2>
+                    //     <div className='login-name-div'>name: <input type='text' name='name' value={signupDetails.name} onChange={handleSignupInput} /></div>
+                    //     <div className='login-email-div'>email:<input type='email' name='email' value={signupDetails.email} onChange={handleSignupInput} /></div>
+                    //     <div className='login-password-div'>password: <input type='password' name='password' value={signupDetails.password} onChange={handleSignupInput} /></div>
+                    //     <div className='signin-button-div'><button onClick={handleSignup}>Sign up</button></div>
+                    //     <p>Already a user? <span onClick={() => toggleForm('sign-in')}>Sign in now</span></p>
+
+                    //     <div className='error-div-loginandsignup'>{signupError}</div>
+                    // </div>
+
                     <div className='sign-up-div'>
-                        <h2>Sign up </h2>
-                        <div className='login-name-div'>name: <input type='text' name='name' value={signupDetails.name} onChange={handleSignupInput} /></div>
-                        <div className='login-email-div'>email:<input type='email' name='email' value={signupDetails.email} onChange={handleSignupInput} /></div>
-                        <div className='login-password-div'>password: <input type='password' name='password' value={signupDetails.password} onChange={handleSignupInput} /></div>
+                        <h2>Sign up  </h2>
+
+                        <div className='login-input-section'>
+                            <div className='login-texts-div'>
+                                <div >NAME </div>
+                                <div >EMAIL </div>
+                                <div >PASSWORD </div>
+                            </div>
+
+                            <div className='login-text-div'>
+                                <input type='text' name='name' value={signupDetails.name} onChange={handleSignupInput} />
+                                <input type='email' name='email' value={signupDetails.email} onChange={handleSignupInput} />
+                                <input type='password' name='password' value={signupDetails.password} onChange={handleSignupInput} />
+                            </div>
+                        </div>
                         <div className='signin-button-div'><button onClick={handleSignup}>Sign up</button></div>
                         <p>Already a user? <span onClick={() => toggleForm('sign-in')}>Sign in now</span></p>
-
                         <div className='error-div-loginandsignup'>{signupError}</div>
                     </div>
+
                 )}
 
                 <div className='break-line'></div>

@@ -123,7 +123,7 @@
   background-color: #D6E8FC;
 }
 
-#side-nav-bar .side-nav-bar-button-not{
+#side-nav-bar .side-nav-bar-button-not {
   cursor: not-allowed;
 }
 
@@ -476,7 +476,7 @@
 }
 
 /* CSS for Card Container */
-.card-container-none{
+.card-container-none {
   display: none;
 }
 
@@ -492,7 +492,7 @@
   margin: 10px;
 }
 
-.card-container-block{
+.card-container-block {
   display: block;
 }
 
@@ -780,15 +780,18 @@
 
 .modal-image-container {
   position: relative;
+  height: 600px;
 }
 
 .modal-image-container img {
   border-radius: 15px 0 0 15px;
+  height: 600px;
+  overflow: hidden;
 }
 
 .modal-login-form {
   background-color: white;
-  border-radius: 15px;
+  border-radius: 0 15px 15px 0;
   width: 500px;
   height: 600px;
   position: relative;
@@ -904,7 +907,7 @@
   width: 600px;
   height: 300px;
   background-color: white;
-  border-radius: 15px;
+  /* border-radius: 15px; */
   /* box-shadow: 0 0 10px 1px lightgray; */
   padding: 20px;
   display: flex;
@@ -920,27 +923,31 @@
 }
 
 .profile-img-div {
-  width: 550px;
-  height: 150px;
-  overflow: hidden;
+  position: relative;
+  top: 0;
+  width: 640px;
+  height: 180px;
+  overflow-x: hidden;
   border-radius: 15px 15px 0 0;
 
   >img {
-    max-width: 550px;
-    transform: rotate(180deg);
+    width: 640px;
+    /* transform: rotate(90deg); */
+    position: absolute;
+    top: 0;
   }
 }
 
 .profile-img-div-2 {
   position: relative;
-  width: 550px;
-  height: 200px;
+  width: 640px;
+  height: 180px;
   overflow: hidden;
   border-radius: 0 0 15px 15px;
 
   >img {
-    max-width: 550px;
-    transform: rotate(180deg);
+    width: 640px;
+    /* transform: rotate(90deg); */
     position: absolute;
     bottom: 0;
   }
@@ -2441,6 +2448,7 @@
     position: sticky;
     top: -1px;
     background-color: white;
+    z-index: 3;
   }
 }
 
@@ -2451,6 +2459,7 @@
   box-shadow: 0 0 10px 1px lightgray;
   border-radius: 15px;
   margin-left: 10px;
+  z-index: 4;
 }
 
 .checkout-hotel-info-container {
@@ -3821,8 +3830,8 @@
   >h1 {
     font-size: 50px;
 
-    > span{
-      color: rgb(15,126,253);
+    >span {
+      color: rgb(15, 126, 253);
     }
   }
 
@@ -3857,7 +3866,7 @@
   overflow: auto;
 }
 
-.mytrip-info-div::-webkit-scrollbar{
+.mytrip-info-div::-webkit-scrollbar {
   list-style: none;
   width: 0.1px;
 }
@@ -3872,19 +3881,19 @@
   border-radius: 70px;
 }
 
-.profile-img-container{
+.profile-img-container {
   position: absolute;
   left: 50%;
   top: -20%;
   transform: translate(-50%, 20%);
 
-  > img{
+  >img {
     max-width: 300px;
     border-radius: 50%;
   }
 }
 
-.profile-info-container{
+.profile-info-container {
   position: relative;
   top: 40%;
   height: 40%;
@@ -3894,16 +3903,16 @@
   flex-direction: column;
   justify-content: space-evenly;
 
-  > div{
+  >div {
     display: flex;
     justify-content: space-between;
 
-    > span{
+    >span {
       font-size: 22px;
       font-weight: bold;
     }
 
-    > p{
+    >p {
       font-size: 22px;
       font-weight: bold;
       color: rgb(153, 153, 153);
@@ -3911,57 +3920,57 @@
   }
 }
 
-.mytrip-flight-card{
+.mytrip-flight-card {
   margin: 60px;
   padding: 30px;
-  box-shadow: 0 0 10px 1px rgb(159,199,255);
+  box-shadow: 0 0 10px 1px rgb(159, 199, 255);
   border-radius: 20px;
   display: flex;
   flex-direction: column;
   gap: 24px;
 }
 
-.mytrip-flight-card-section{
+.mytrip-flight-card-section {
   display: flex;
   justify-content: space-evenly;
 }
 
-.mytrip-logo-section{
+.mytrip-logo-section {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: space-evenly;
 
-  > img{
+  >img {
     max-width: 70px;
     border-radius: 10px;
   }
 
-  > p{
+  >p {
     color: rgb(153, 153, 153);
   }
 }
 
-.mytrip-flight-info{
+.mytrip-flight-info {
   display: flex;
   justify-content: space-evenly;
   align-items: center;
   gap: 20px;
 }
 
-.mytrip-srcdes{
+.mytrip-srcdes {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 10px;
 
-  > p{
+  >p {
     font-size: 18px;
     font-weight: bold;
   }
 }
 
-.mytrip-home-button-container{
+.mytrip-home-button-container {
   padding: 80px;
   display: flex;
   flex-direction: column;
@@ -3969,28 +3978,63 @@
   align-items: center;
   gap: 30px;
 
-  > p{
+  >p {
     font-size: 20px;
     font-weight: 500;
     text-align: center;
   }
 }
 
-.mytrip-navlink{
+.mytrip-navlink {
   text-decoration: none;
   display: flex;
   justify-content: center;
 }
 
-.mytrip-home-button{
+.mytrip-home-button {
   width: 200px;
   height: 60px;
   cursor: pointer;
   border-radius: 12px;
-  background-color: rgb(118,175,255);
+  background-color: rgb(118, 175, 255);
   border: none;
 }
 
-.mytrip-home-button:hover{
-  background-color: rgb(15,126,253);
+.mytrip-home-button:hover {
+  background-color: rgb(15, 126, 253);
+}
+
+
+
+
+
+
+
+
+.login-input-section {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  padding: 20px 0;
+}
+
+.login-text-div {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: 30px;
+
+  >input {
+    width: 150px;
+  }
+}
+
+.login-texts-div {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  flex-direction: column;
+  gap: 35px;
 }

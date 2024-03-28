@@ -405,7 +405,8 @@ export default function Checkout() {
                 <hr />
 
                 {/* Inside of this section im taking in the input for the passanger */}
-                <h1><TbCircleNumber2 /> Passanger details</h1>
+                <h1><TbCircleNumber2 /> {selectedHotelData ? "Guest details" : "Passanger details"}</h1>
+                {/* <h1><TbCircleNumber2 /> Passanger details</h1> */}
                 <div className="checkout-passanger-detail-container">
                     {/* The below section takes in input for the hotel adult count */}
                     {hotelAdultCount > 0 && <div className="passanger-title">Enter details of adult guest</div>}

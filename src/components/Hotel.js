@@ -73,9 +73,9 @@ export default function Hotel() {
             setCurrentImageIndex(nextImage);
         }, 3000);
 
-        // return () => {
-        //     clearInterval(interval);
-        // };
+        return () => {
+            clearInterval(interval);
+        };
     }, [currentImageIndex]);
 
     // If loading is true then it shows the loading div
