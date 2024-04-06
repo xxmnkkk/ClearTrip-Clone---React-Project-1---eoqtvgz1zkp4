@@ -898,7 +898,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 2;
+  z-index: 100;
   display: flex;
   flex-direction: column;
 }
@@ -2459,7 +2459,7 @@
   box-shadow: 0 0 10px 1px lightgray;
   border-radius: 15px;
   margin-left: 10px;
-  z-index: 4;
+  z-index: 2;
 }
 
 .checkout-hotel-info-container {
@@ -4037,4 +4037,910 @@
   align-items: flex-start;
   flex-direction: column;
   gap: 35px;
+}
+
+
+
+
+
+
+
+.mytrip-bookign-switcher {
+  display: flex;
+  justify-content: space-evenly;
+  padding: 40px 0;
+
+  >div {
+    border: 1px solid black;
+  }
+}
+
+
+
+
+
+
+/* Responsive code below */
+@media only screen and (max-width: 430px) {
+
+  /* Header */
+  #nav-bar #cleartrip-logo svg {
+    width: 100px;
+    height: 30px;
+  }
+
+  #login-button button {
+    width: 120px;
+    height: 30px;
+    font-size: 12px;
+  }
+
+  #account-button {
+    width: 120px;
+    height: 30px;
+    font-size: 12px;
+  }
+
+  #nav-bar #cleartrip-logo {
+    margin-left: 20px;
+  }
+
+  #login-button {
+    margin-right: 20px;
+  }
+
+  #account-button>.account-icon {
+    display: none;
+  }
+
+  #account-button {
+    margin-right: 20px;
+  }
+
+  /* Main section */
+  .cleartrip-nav-and-content-section {
+    display: flex;
+    flex-direction: column;
+    height: fit-content;
+    justify-content: center;
+    /* align-items: center; */
+  }
+
+  .side-navbar-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    padding: 0px;
+    margin-left: 0px;
+  }
+
+  #side-nav-bar {
+    display: flex;
+    flex-direction: row;
+    overflow-x: scroll;
+
+    >.side-nav-bar-button {
+      width: 100px;
+      height: 40px;
+      font-size: 20px;
+      gap: 15px;
+    }
+
+    >.side-nav-bar-button-not {
+      display: none;
+    }
+  }
+
+  .flight-booking-section {
+    position: relative;
+    margin: 0px 0px 0px -10px;
+    padding: 10px;
+    padding-left: 10px;
+    border: 1px solid #E6E6E6;
+    box-shadow: 0 0 5px 0.5px lightgrey;
+    border-radius: 15px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    height: fit-content;
+
+    >.anonymous-text {
+      font-size: 14px;
+    }
+
+    >.trip-passanger-button-div {
+      display: flex;
+      flex-direction: column;
+      /* align-items: flex-start; */
+      gap: 0;
+
+      >.passanger-button-container {
+        margin-left: 11px;
+        width: 95%;
+
+        >.passenger-button {
+          width: inherit;
+          text-wrap: wrap;
+          font-size: 14px;
+          gap: 5px;
+          /* justify-content: center; */
+        }
+
+        >.passanger-hidden-div {
+          width: 80%;
+
+          >.passanger-div-section .class-buttons {
+            margin-bottom: 10px;
+          }
+        }
+      }
+
+      >.trip-button-container {
+
+        >.trip-button {
+          font-size: 14px;
+        }
+      }
+    }
+
+    >.fare-type-div {
+      display: none;
+    }
+
+    >.flight-des-arr-div {
+      >.dep-arr {
+        width: 150px;
+      }
+
+      >.flight-hidden-div {
+        width: 100%;
+      }
+
+      >.flight-arrival-hidden-div {
+        position: absolute;
+        left: 0;
+        width: 100%;
+      }
+    }
+
+    >.date-selector-and-search-div {
+      flex-direction: column;
+      /* justify-content: flex-end; */
+      /* align-items: flex-end; */
+
+      >.date-container {
+        width: 90%;
+
+        >div .rdrCalendarWrapper {
+          width: 100%;
+          overflow-x: scroll;
+        }
+      }
+
+      >.search-flights-button {
+        margin-left: 47%;
+        width: 160px;
+        height: 40px;
+      }
+    }
+  }
+
+  .hotel-booking-section {
+    position: relative;
+    margin: 0px 0px 0px -10px;
+    padding: 10px;
+    padding-left: 10px;
+    border: 1px solid #E6E6E6;
+    box-shadow: 0 0 5px 0.5px lightgrey;
+    border-radius: 15px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    height: fit-content;
+
+    >.hotel-text-content {
+      font-size: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    >.hotel-booking-sub-section .hotel-location-hidden-div-container {
+      width: 81%;
+    }
+
+    >.hotel-booking-sub-section .hotel-date-room-section {
+      flex-direction: column;
+      gap: 10px;
+
+      >.date-container {
+        width: 87%;
+
+        >div .rdrCalendarWrapper {
+          width: 94%;
+          overflow-x: scroll;
+        }
+      }
+
+      >.hotel-guest-section {
+        width: 87%;
+      }
+    }
+
+    >.search-hotel-button-container .search-hotels-button {
+      width: 180px;
+      height: 40px;
+
+    }
+  }
+
+  .adds-div {
+    width: 100%;
+    /* margin-left: 3px; */
+  }
+
+  .app-download-div {
+    display: none;
+  }
+
+  .useless-text-container {
+    margin-top: 200px;
+
+    >.useless-text-child-container {
+      width: 80%;
+    }
+  }
+
+  /* Signup modal */
+  .modal-overlay {
+    display: flex;
+    flex-direction: column;
+
+    >.modal-image-container {
+      display: none;
+    }
+
+    >.modal-login-form {
+      width: 80%;
+      border-radius: 15px;
+
+      >.sign-in-div h2 {
+        text-align: center;
+      }
+
+      >.sign-up-div h2 {
+        text-align: center;
+      }
+
+      >.sign-up-div p {
+        width: 290px;
+        position: absolute;
+        left: 50%;
+        transform: translate(-50%);
+        top: 70%;
+      }
+    }
+  }
+
+  /* Profile modal */
+  .profile-modal {
+
+    >.profile-img-div,
+    .profile-img-div-2 {
+      width: 80%;
+    }
+
+    >.modal-content {
+      width: 70%;
+    }
+  }
+
+
+  /* Footer section */
+  .footer-container {
+    width: 100%;
+
+    >.footer-section {
+      height: fit-content;
+
+      >.footer-links-container {
+        flex-direction: column;
+
+        >.footer-links-logo {
+          width: 100%;
+        }
+
+        >.footer-links-and-trademard {
+          width: 120%;
+
+          >.footer-trademark {
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+
+            >.trademark-anchor {
+              font-size: 8px;
+
+              >span,
+              a {
+                text-align: center;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  /* Flight page */
+  .flight-modify-search-container {
+    height: fit-content;
+    margin-bottom: 0;
+
+    >.dep-and-arr-div {
+      flex-direction: column;
+      margin: 20px 0;
+      gap: 10px;
+
+      >.flight-des-arr-div {
+        width: 100%;
+
+        >.flight-hidden-div {
+          width: 100%;
+        }
+
+        >.flight-arrival-hidden-div {
+          width: 100%;
+          left: 0;
+        }
+      }
+
+      >.flight-passanger-modifier {
+        width: 100%;
+
+        >.passanger-button-container {
+          width: 100%;
+
+          >.passenger-button {
+            width: 90%;
+            text-wrap: wrap;
+            font-weight: 400;
+          }
+
+          >.passanger-hidden-div {
+            width: 87%;
+
+            >.passanger-div-section .class-buttons {
+              margin-bottom: 10px;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .flight-filter-and-flightinfo-container {
+    margin: 0;
+    flex-direction: column;
+
+    >.filter-container {
+      width: 100%;
+      position: relative;
+
+      >.filter-stop-container {
+        font-size: 16px;
+
+        >.stop-selection-container {
+          gap: 2px;
+
+          >.stops-selection label {
+            font-size: 14px;
+          }
+        }
+
+        >.sort-checkboxes {
+          gap: 2px;
+
+          >label {
+            font-size: 14px;
+          }
+        }
+      }
+    }
+
+    >.flight-information-section {
+      margin-top: 50px;
+
+      >.flight-adds-container {
+        width: 140%;
+      }
+
+      >.flight-help-bar,
+      .round-flight-help-bar {
+        display: none;
+      }
+
+      >.flight-information-container {
+        width: 137%;
+
+        >.flightinfo-container {
+          flex-direction: column;
+          align-items: center;
+          margin: 20px 0;
+          gap: 0px;
+
+          >.flight-name-container {
+            width: 80%;
+            flex-direction: row;
+            justify-content: center;
+            gap: 10px;
+          }
+
+          >.flight-info-container {
+            height: 100px;
+          }
+
+          >.flight-price-container {
+            flex-direction: row;
+            gap: 10px;
+            width: 70%;
+          }
+
+          >.flight-book-button-container {
+            margin-top: 14px;
+            width: 100px;
+          }
+        }
+
+        >.hidden-flight-details-container {
+          >.hidden-flight-information {
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+
+            >.hidden-flight-logo-name {
+              width: 120%;
+              flex-direction: row;
+              justify-content: center;
+              align-items: center;
+              gap: 10px;
+
+              >div {
+                justify-content: center;
+                align-items: center;
+
+                >span {
+                  font-size: 12px;
+                }
+              }
+            }
+
+            >.hidden-flight-deparr {
+              flex-direction: row;
+              gap: 10px;
+              align-items: center;
+            }
+
+            >.hidden-flight-duration {
+              flex-direction: row;
+              gap: 10px;
+            }
+
+            >.hidden-flight-excess-information {
+
+              >.hidden-flight-excess-text,
+              .hidden-flight-excess-text-amenities {
+                font-size: 10px;
+              }
+            }
+          }
+        }
+      }
+
+      >.round-trip-flight-container {
+        width: 143%;
+
+        >.roundtrip-flight-information-section {
+
+          >.round-trip-flightinfo-container {
+            flex-direction: column;
+
+            >.round-trip-flight-name-container {
+
+              >.flight-id {
+                font-size: 12px;
+              }
+            }
+
+            >.round-trip-flight-info-container {
+              justify-content: center;
+
+              >.flight-duration-and-stop-container {
+                >.flight-stop-text {
+                  text-align: center;
+                  font-size: 13px;
+                }
+
+                >.flight-hours {
+                  font-size: 13px;
+                }
+              }
+
+              >.flight-source-and-departure-time-container div,
+              .flight-destination-and-arrival-time-container div {
+                font-size: 13px;
+              }
+            }
+          }
+        }
+      }
+
+      >.selected-flight-div-container {
+        width: 136%;
+
+        >.selected-flight-div {
+          gap: 30px;
+          padding: 10px;
+
+          >.selected-flight {
+
+
+            >.selected-flight-card {
+              flex-direction: column;
+              gap: 0;
+
+              >.flight-info-container {
+                height: 100px;
+                gap: 14px;
+              }
+            }
+          }
+        }
+      }
+
+      >.round-details-modal-layover {
+
+        >.round-modal-details-container {
+          width: 90%;
+
+          >.hidden-flight-details-container {
+
+
+            >.hidden-flight-information {
+              padding: 10px;
+
+              >.hidden-flight-logo-name {
+
+                >div {
+                  /* align-items: center; */
+
+                  >span {
+                    font-size: 8px;
+                  }
+                }
+              }
+
+              >.hidden-flight-duration {
+                font-size: 12px;
+
+                >span {
+                  font-size: 11px;
+                }
+              }
+
+              >.hidden-flight-deparr {
+                align-items: center;
+
+                >span {
+                  font-size: 12px;
+                  text-align: center;
+                }
+
+                >p {
+                  font-size: 10px;
+                  text-align: center;
+
+                }
+              }
+
+              >.hidden-flight-excess-information {
+
+                >.hidden-flight-excess-text,
+                .hidden-flight-excess-text-amenities {
+                  font-size: 8px;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  /* Hotel page */
+  .hotel-filter-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    height: fit-content;
+    margin: 10px 0;
+  }
+
+  .filtered-hotel-card-section {
+    width: 90%;
+
+    >.filtered-hotel-card {
+      flex-direction: column;
+
+      >.filtered-hotel-card-image-container {
+        height: 230px;
+        width: 100%;
+        overflow: hidden;
+        border-radius: 15px 15px 0 0;
+
+        >img {
+          width: 100%;
+          overflow: hidden;
+        }
+      }
+
+      >.filtered-hotel-data-section {
+        width: 100%;
+
+        >.filtered-hotelname-and-rating-container {
+          align-items: center;
+          padding: 60px 60px 10px 60px;
+
+          >span {
+            font-size: 22px;
+
+          }
+        }
+
+        >.filtered-hotel-amenities {
+          padding: 20px 60px;
+
+          >strong {
+            font-size: 16px;
+          }
+
+          >div {
+            font-size: 14px;
+          }
+        }
+
+        >.filtered-hotel-price {
+          padding-right: 0;
+          padding-bottom: 30px;
+          justify-content: flex-start;
+          padding-left: 60px;
+
+        }
+      }
+    }
+  }
+
+  .hotel-card-section {
+    display: flex;
+    flex-direction: column;
+    width: 80%;
+
+    >.hotel-card {
+      width: 100%;
+    }
+  }
+
+  .selected-hotel-info-img {
+    display: flex;
+    flex-direction: column-reverse;
+    height: fit-content;
+    margin-top: 0px;
+
+    >.selected-hotel-image-and-add-container {
+      width: 100%;
+      height: 400px;
+
+      >.selected-hotel-image-container {
+        height: 250px;
+        overflow: hidden;
+
+        >img {
+          min-width: 100%;
+        }
+      }
+
+      >.select-room-button {
+        margin-left: 50%;
+        transform: translate(-50%);
+      }
+    }
+
+    >.selected-hotel-info-container {
+      width: 95%;
+      padding: 10px;
+      overflow: visible;
+
+      >.selected-hotel-name {
+        padding-top: 10px;
+        text-align: center;
+      }
+
+      >.selected-hotel-star,
+      .selected-hotel-rating {
+        padding-bottom: 10px;
+        text-align: center;
+      }
+
+      >.selected-hotel-meal {
+        margin: 10px 10px;
+
+        >div p {
+          font-size: 14px;
+        }
+      }
+
+      >.line-break {
+        width: 75%;
+      }
+
+      >.selected-hotel-propertyrules {
+        margin: 10px;
+
+        >div p {
+          font-size: 16px;
+        }
+      }
+
+      >.selected-hotel-amenities {
+        margin: 10px;
+
+        >div p {
+          font-size: 16px;
+        }
+      }
+    }
+  }
+
+  .selected-hotel-review-container {
+
+    >.selected-hotel-reviews {
+      /* width: 90%; */
+      display: grid;
+      grid-template-columns: 1fr;
+
+    }
+  }
+
+  .selected-hotel-room-options {
+
+    >.selected-hotel-room-container {
+      grid-template-columns: 1fr;
+
+      >.room-container {
+        width: 80%;
+      }
+    }
+  }
+
+  /* Checkout container */
+  .checkout-container {
+    flex-direction: column;
+    align-items: center;
+
+    >.review-your-itinerary {
+      width: 90%;
+
+      >.checkout-hotel-card {
+        margin-left: 0;
+        flex-direction: column;
+        gap: 30px;
+
+        >.checkout-hotel-price {
+          width: 100%;
+        }
+      }
+
+      >.checkout-passanger-detail-container {
+
+        >.passanger-title {
+          margin-bottom: 0;
+        }
+
+        >.passanger-detail-card {
+          flex-direction: column;
+          align-items: flex-start;
+        }
+      }
+
+      >.checkout-contact-container {
+        margin-left: 10px;
+      }
+
+      >.checkout-flight-break {
+
+        >.checkout-flight-card {
+          >.checkout-flight-srcdes-date-container p{
+            font-size: 16px;
+          }
+
+          >.checkout-flight-info-container {
+            flex-direction: column;
+            gap: 20px;
+            padding-bottom: 10px;
+
+            >.checkout-flight-name-section{
+
+              >img{
+                width: 70px;
+                height: 70px;
+              }
+
+              >.checkout-flight-name-info{
+                >span{
+                  font-size: 16px;
+                }
+              }
+            }
+
+            >.checkout-flight-dotted-line {
+              display: none;
+            }
+
+            >.checkout-flight-time-container {
+              flex-direction: row;
+            }
+
+            >.checkout-flight-time-container:first-child {
+              >p {
+                display: flex;
+                flex-direction: column;
+              }
+            }
+          }
+        }
+
+        >.selected-flight-fare-section{
+          >.flight-fare-content{
+            padding: 10px;
+
+            >.flight-fare-info{
+              grid-template-columns: 1fr;
+            }
+
+            >.fare-info-container{
+              flex-direction: column;
+
+              >.fare-information{
+                display: grid;
+                grid-template-columns: 1fr 2fr 2fr;
+                justify-content: center;
+
+                >.fare-extra-info{
+                  >span{
+                    font-size: 14px;
+                  }
+                  >p{
+                    font-size: 12px;
+                  }
+                }
+
+                >.fare-faretype{
+                  width: 100%;
+                  padding: 0 30%;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+
+    >.checkout-price-section {
+      width: 90%;
+    }
+  }
 }

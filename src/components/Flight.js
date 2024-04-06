@@ -342,7 +342,7 @@ export default function Flight() {
                         </div>
 
                         {/* this is the code for time change, this one is for visual representation only */}
-                        <h3>Time</h3>
+                        {/* <h3>Time</h3>
                         <div className="sort-checkboxes">
                             <div className="sort-inner-div">
                                 <label>
@@ -383,10 +383,10 @@ export default function Flight() {
                                 </label>
                                 <div>8 pm - Midnight</div>
                             </div>
-                        </div>
+                        </div> */}
 
                         {/* this is the code for trip duration change, this one is for visual representation only */}
-                        <h3>Trip duration</h3>
+                        {/* <h3>Trip duration</h3>
                         <div className="sort-sliders">
                             <label>
                                 <div>
@@ -395,10 +395,10 @@ export default function Flight() {
                                 </div>
                                 <input type="range" />
                             </label>
-                        </div>
+                        </div> */}
 
                         {/* this is the code for layover duration change, this one is for visual representation only */}
-                        <h3>Layover duration</h3>
+                        {/* <h3>Layover duration</h3>
                         <div className="sort-sliders">
                             <label>
                                 <div>
@@ -407,7 +407,7 @@ export default function Flight() {
                                 </div>
                                 <input type="range" />
                             </label>
-                        </div>
+                        </div> */}
 
                     </div>
                 </div>

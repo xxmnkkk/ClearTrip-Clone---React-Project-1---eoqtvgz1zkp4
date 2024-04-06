@@ -247,16 +247,16 @@ export default function Payment() {
                                     <h2>Please enter your card details to complete your booking</h2>
                                     <label>
                                         Credit card number
-                                        <input className="input-one" type="text" maxLength="19" name="creditNumberInput" placeholder="1234 4567 8912 3456" />
+                                        <input className="input-one" type="number" maxLength="19" name="creditNumberInput" placeholder="1234 4567 8912 3456" />
                                     </label>
                                     <div>
                                         <label>
                                             Cvv
-                                            <input type="text" maxLength="3" name="creditCvvInput" placeholder="123" />
+                                            <input type="number" maxLength="3" name="creditCvvInput" placeholder="123" />
                                         </label>
                                         <label>
                                             Exp date
-                                            <input type="text" name="creditDateInput" maxLength="7" placeholder="12/1234" />
+                                            <input type="number" name="creditDateInput" maxLength="7" placeholder="12/1234" />
                                         </label>
                                     </div>
                                     <label>
@@ -273,16 +273,16 @@ export default function Payment() {
                                     <h2>Please enter your card details to complete your booking</h2>
                                     <label>
                                         Debit card number
-                                        <input className="input-one" type="text" maxLength="19" name="debitNumberInput" placeholder="1234 4567 8912 3456" />
+                                        <input className="input-one" type="number" maxLength="19" name="debitNumberInput" placeholder="1234 4567 8912 3456" />
                                     </label>
                                     <div>
                                         <label>
                                             Cvv
-                                            <input type="text" name="debitCvvInput" maxLength="3" placeholder="123" />
+                                            <input type="number" name="debitCvvInput" maxLength="3" placeholder="123" />
                                         </label>
                                         <label>
                                             Exp date
-                                            <input type="text" name="debitDateInput" maxLength="7" placeholder="12/1234" />
+                                            <input type="number" name="debitDateInput" maxLength="7" placeholder="12/1234" />
                                         </label>
                                     </div>
                                     <label>

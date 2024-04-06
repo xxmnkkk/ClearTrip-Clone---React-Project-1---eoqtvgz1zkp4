@@ -582,10 +582,17 @@ export default function Checkout() {
 
                     <div className="checkout-email-div">
                         <div>Email address</div>
+                        {/* <input
+                            type="email"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                        /> */}
                         <input
                             type="email"
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
+                            pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}"
+                            title="Please enter a valid email address"
                         />
                     </div>
                 </div>

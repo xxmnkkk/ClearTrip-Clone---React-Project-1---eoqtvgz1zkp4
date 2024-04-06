@@ -9,6 +9,9 @@ export default function MyTrip() {
     const [bookingData, setBookingData] = useState();
     const [showPassword, setShowPassword] = useState(false);
 
+    const [flightSelected, setFlightSelected] = useState(false);
+    const [hotelSelected, setHotelSelected] = useState(false);
+
     console.log("Booking data: ", bookingData);
 
     useEffect(() => {
@@ -35,6 +38,22 @@ export default function MyTrip() {
             })
     }, [])
 
+    const flightClick = () => {
+        setFlightSelected(!flightSelected)
+
+        if(hotelSelected){
+            setHotelSelected(!hotelSelected)
+        }
+    }
+
+    const hotelClick = () => {
+        setHotelSelected(!hotelSelected)
+
+        if(flightSelected){
+            setFlightSelected(!flightSelected)
+        }
+    }
+
     const userName = sessionStorage.getItem("loggedInUserName");
     const loggedInUserString = sessionStorage.getItem("loggedInUser");
     const loggedInUser = JSON.parse(loggedInUserString);
@@ -49,7 +68,11 @@ export default function MyTrip() {
 
             <div className="mytrip-mytrip-content-and-profile-section">
                 <div className="mytrip-info-div">
-                    {bookingData && bookingData.map((booking, index) => (
+                    <div className="mytrip-bookign-switcher">
+                        <div onClick={flightClick}>Flights</div>
+                        <div onClick={hotelClick}>Hotels</div>
+                    </div>
+                    {!flightSelected && !hotelSelected && bookingData && bookingData.map((booking, index) => (
                         <div key={index} className="mytrip-flight-card">
                             {booking.booking_type === "flight" ? (
                                 <div key={booking.flight._id} className="mytrip-flight-card-section">
@@ -126,6 +149,100 @@ export default function MyTrip() {
                             }
                         </div>
                     ))}
+
+                    {
+                        bookingData && flightSelected && bookingData.filter((booking) => {
+                            return booking.booking_type === "flight"
+                        })
+                        .map((booking, index) => (
+                            <div key={index} className="mytrip-flight-card">
+                                {booking.booking_type === "flight" &&
+                                    <div key={booking.flight._id} className='mytrip-flight-card-section'>
+                                        <div className="mytrip-logo-section">
+                                            <img src="https://images.jdmagicbox.com/comp/delhi/c9/011pxx11.xx11.171229170107.e6c9/catalogue/indigo-air-cargo-services-mahipalpur-extension-delhi-cargo-services-i9owvibyd4.jpg" />
+                                            <span>IndiGo</span>
+                                            <p>{booking.flight.flightID.slice(0, 5)}</p>
+                                        </div>
+
+                                        <div className="mytrip-flight-info">
+                                            <div className="mytrip-srcdes">
+                                                <p>{booking.flight.source}</p>
+                                                <span>{booking.flight.departureTime}</span>
+                                            </div>
+                                            <div>
+                                                <div className="flight-duration-and-stop-container">
+                                                    <div className="flight-hours">{booking.flight.duration} hr</div>
+                                                    <div className="flight-line-break"></div>
+                                                    <div className="flight-stop-text">{booking.flight.stops} stop</div>
+                                                </div>
+                                            </div>
+                                            <div className="mytrip-srcdes">
+                                                <p>{booking.flight.destination}</p>
+                                                <span>{booking.flight.arrivalTime}</span>
+                                            </div>
+                                        </div>
+
+                                        <div className="hidden-flight-excess-information">
+                                            <div className="hidden-flight-excess-text">
+                                                Check-in baggage <span>15kg(1 piece) / adult</span></div>
+                                            <div className="hidden-flight-excess-text">
+                                                Cabin baggage <span>7kg / adult</span></div>
+                                            <div className="hidden-flight-excess-text-amenities">
+                                                <p>In-flight entertainment</p><p>Complimentary beverage</p><p>Booked on: {booking.created_at.substring(0, 10)}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                        ))
+                    }
+
+                    {
+                        bookingData && hotelSelected && bookingData.filter((booking) => {
+                            return booking.booking_type === "hotel"
+                        })
+                        .map((booking, index) => (
+                            <div key={index} className="mytrip-flight-card">
+                                {booking.booking_type === "hotel" &&
+                                    <div key={booking._id} className="mytrip-flight-card-section">
+                                    <div className="mytrip-logo-section">
+                                        <img src="https://images.unsplash.com/photo-1496417263034-38ec4f0b665a?q=80&w=3271&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" />
+                                        <span>{booking.hotel.name}</span>
+                                        <p>{booking.hotel.location}</p>
+                                    </div>
+
+                                    <div className="mytrip-flight-info">
+                                        <div className="mytrip-srcdes">
+                                            {/* <p>{booking.flight.source}</p> */}
+                                            {/* <span>{booking.flight.departureTime}</span> */}
+                                        </div>
+                                        <div>
+                                            <div className="flight-duration-and-stop-container">
+                                                {/* <div className="flight-hours">{booking.flight.duration} hr</div> */}
+                                                {/* <div className="flight-line-break"></div> */}
+                                                {/* <div className="flight-stop-text">{booking.flight.stops} stop</div> */}
+                                            </div>
+                                        </div>
+                                        <div className="mytrip-srcdes">
+                                            {/* <p>{booking.flight.destination}</p> */}
+                                            {/* <span>{booking.flight.arrivalTime}</span> */}
+                                        </div>
+                                    </div>
+
+                                    <div className="hidden-flight-excess-information">
+                                        <div className="hidden-flight-excess-text">
+                                            Check-in prior <span>One hour</span></div>
+                                        <div className="hidden-flight-excess-text">
+                                            Meal's Included <span>Breakfast/Lunch/Dinner</span></div>
+                                        <div className="hidden-flight-excess-text-amenities">
+                                            <p>Booked on: {booking.created_at.substring(0, 10)}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                }
+                            </div>
+                        ))
+                    }
 
 
 
