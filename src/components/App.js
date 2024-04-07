@@ -11,6 +11,7 @@ import Checkout from './Checkout';
 import Payment from './Payment';
 import SuccessModal from './SuccessModal';
 import Footer from './Footer';
+import FailureModal from './FailureModal';
 
 // This is where the whole website starts from
 

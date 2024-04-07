@@ -3735,7 +3735,7 @@
   display: flex;
   gap: 40px;
   align-items: center;
-
+  justify-content: center;
 }
 
 .footer-links-logo {
@@ -4048,11 +4048,39 @@
 .mytrip-bookign-switcher {
   display: flex;
   justify-content: space-evenly;
-  padding: 40px 0;
+  padding: 20px 0;
+
+  position: sticky;
+  top: 0px;
+  z-index: 1;
+  background-color: white;
 
   >div {
-    border: 1px solid black;
+    background-color: #A4C9FF;
+    width: 180px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: black;
+    font-weight: 600;
+    border-radius: 10px;
+    cursor: pointer;
   }
+
+  >.booking-active {
+    background-color: #137EFD;
+  }
+}
+
+.booking-selection-location-error{
+  width: 100%;
+  text-align: center;
+  color: red;
+}
+
+.error-input::placeholder{
+  color: red;
 }
 
 
@@ -4332,10 +4360,17 @@
     >.profile-img-div,
     .profile-img-div-2 {
       width: 80%;
+      height: 130px;
     }
 
     >.modal-content {
       width: 70%;
+      gap: 10px;
+      height: 250px;
+
+      >.user-details div {
+        text-align: center;
+      }
     }
   }
 
@@ -4834,6 +4869,10 @@
     >.review-your-itinerary {
       width: 90%;
 
+      >h1 {
+        font-size: 26px;
+      }
+
       >.checkout-hotel-card {
         margin-left: 0;
         flex-direction: column;
@@ -4863,7 +4902,7 @@
       >.checkout-flight-break {
 
         >.checkout-flight-card {
-          >.checkout-flight-srcdes-date-container p{
+          >.checkout-flight-srcdes-date-container p {
             font-size: 16px;
           }
 
@@ -4872,15 +4911,15 @@
             gap: 20px;
             padding-bottom: 10px;
 
-            >.checkout-flight-name-section{
+            >.checkout-flight-name-section {
 
-              >img{
+              >img {
                 width: 70px;
                 height: 70px;
               }
 
-              >.checkout-flight-name-info{
-                >span{
+              >.checkout-flight-name-info {
+                >span {
                   font-size: 16px;
                 }
               }
@@ -4903,37 +4942,61 @@
           }
         }
 
-        >.selected-flight-fare-section{
-          >.flight-fare-content{
+        >.selected-flight-fare-section {
+          >.flight-fare-content {
             padding: 10px;
 
-            >.flight-fare-info{
+            >.flight-fare-info {
               grid-template-columns: 1fr;
             }
 
-            >.fare-info-container{
-              flex-direction: column;
+            >.round-fare-info-container {
 
-              >.fare-information{
-                display: grid;
-                grid-template-columns: 1fr 2fr 2fr;
-                justify-content: center;
+              >.round-fare-information-container {
+                flex-direction: column;
 
-                >.fare-extra-info{
-                  >span{
+                >.round-fare-information {
+                  flex-direction: column;
+                  gap: 10px;
+
+                  >.fare-extra-info {
+                    flex-direction: column;
+                    align-items: center;
+                  }
+                }
+              }
+            }
+
+            >.fare-info-container {
+              flex-direction: row;
+              justify-content: center;
+              gap: 20px;
+
+              >.fare-information {
+                flex-direction: column;
+                width: 50%;
+                gap: 10px;
+
+                >.fare-extra-info {
+                  >span {
                     font-size: 14px;
                   }
-                  >p{
+
+                  >p {
                     font-size: 12px;
                   }
                 }
 
-                >.fare-faretype{
-                  width: 100%;
-                  padding: 0 30%;
+                >.fare-faretype {
+                  width: 50%;
+                  padding: 5px 10px;
                 }
               }
             }
+          }
+
+          >.flight-round-fare-heading {
+            flex-direction: column;
           }
         }
       }
@@ -4941,6 +5004,154 @@
 
     >.checkout-price-section {
       width: 90%;
+    }
+  }
+
+
+  /* Payment container */
+  .payment-container {
+    height: fit-content;
+  }
+
+  .payment-sub-container {
+    flex-direction: column-reverse;
+    height: fit-content;
+    gap: 20px;
+
+    >.payment-review-container {
+      height: fit-content;
+      width: 100%;
+    }
+
+    >.payment-option-container {
+      width: 100%;
+      height: fit-content;
+
+      >.payment-option-sub-container {
+        flex-direction: column;
+        height: fit-content;
+
+        >.payment-options {
+          flex-direction: row;
+          width: 100%;
+          gap: 5px;
+
+          >.option {
+            width: 80px;
+            font-size: 14px;
+          }
+        }
+
+        >.selected-payment-section {
+          width: 100%;
+          height: fit-content;
+
+          >.payment-card-container {
+            padding: 20px;
+
+            >label {
+              /* flex-direction: column; */
+              font-size: 14px;
+              gap: 0px;
+              justify-content: space-between;
+            }
+
+            >div {
+              gap: 0;
+              justify-content: space-between;
+
+              >label {
+                font-size: 14px;
+              }
+            }
+          }
+
+          >.payment-upi-container {
+            flex-direction: column;
+            padding: 20px;
+
+            >.upi-id-container,
+            .qrcode-container {
+              width: 100%;
+            }
+
+          }
+        }
+      }
+
+      >.payment-paynow {
+        margin-top: 20px;
+        flex-direction: column;
+
+        >.payment-terms {
+          width: 100%;
+        }
+
+        >.payment-paynow-total-container {
+          width: 100%;
+          height: 50px;
+          justify-content: center;
+
+          >.payment-paynow-total {
+            display: flex;
+            justify-content: center;
+
+          }
+        }
+      }
+    }
+  }
+
+
+  /* Success and failure modal */
+  .success-modal,
+  .failure-modal {
+    width: 90%;
+    height: 60%;
+
+    >p {
+      font-size: 16px;
+      padding: 10px;
+      text-align: center;
+    }
+  }
+
+
+  /* My trip container */
+  .mytrip-welcome-info-section {
+    >p {
+      width: 100%;
+    }
+  }
+
+  .mytrip-mytrip-content-and-profile-section {
+    flex-direction: column-reverse;
+    margin-top: 40px;
+    position: relative;
+
+    >.mytrip-profile-div {
+      width: 100%;
+      border-radius: 70px 70px 0px 0px;
+    }
+
+    >.mytrip-info-div {
+      border-radius: 0;
+      width: 100%;
+      height: fit-content;
+      overflow: initial;
+      margin-bottom: 40px;
+
+      >.mytrip-bookign-switcher {}
+
+      >.mytrip-flight-card {
+        margin: 20px;
+        padding: 20px;
+
+        >.mytrip-flight-card-section {
+          flex-direction: column;
+          gap: 10px;
+        }
+      }
     }
   }
 }

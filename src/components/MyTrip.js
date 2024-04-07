@@ -69,8 +69,8 @@ export default function MyTrip() {
             <div className="mytrip-mytrip-content-and-profile-section">
                 <div className="mytrip-info-div">
                     <div className="mytrip-bookign-switcher">
-                        <div onClick={flightClick}>Flights</div>
-                        <div onClick={hotelClick}>Hotels</div>
+                        <div onClick={flightClick} className={`${flightSelected && "booking-active"}`}>Flights</div>
+                        <div onClick={hotelClick} className={`${hotelSelected && "booking-active"}`}>Hotels</div>
                     </div>
                     {!flightSelected && !hotelSelected && bookingData && bookingData.map((booking, index) => (
                         <div key={index} className="mytrip-flight-card">
@@ -116,24 +116,6 @@ export default function MyTrip() {
                                         <img src="https://images.unsplash.com/photo-1496417263034-38ec4f0b665a?q=80&w=3271&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" />
                                         <span>{booking.hotel.name}</span>
                                         <p>{booking.hotel.location}</p>
-                                    </div>
-
-                                    <div className="mytrip-flight-info">
-                                        <div className="mytrip-srcdes">
-                                            {/* <p>{booking.flight.source}</p> */}
-                                            {/* <span>{booking.flight.departureTime}</span> */}
-                                        </div>
-                                        <div>
-                                            <div className="flight-duration-and-stop-container">
-                                                {/* <div className="flight-hours">{booking.flight.duration} hr</div> */}
-                                                {/* <div className="flight-line-break"></div> */}
-                                                {/* <div className="flight-stop-text">{booking.flight.stops} stop</div> */}
-                                            </div>
-                                        </div>
-                                        <div className="mytrip-srcdes">
-                                            {/* <p>{booking.flight.destination}</p> */}
-                                            {/* <span>{booking.flight.arrivalTime}</span> */}
-                                        </div>
                                     </div>
 
                                     <div className="hidden-flight-excess-information">
@@ -209,24 +191,6 @@ export default function MyTrip() {
                                         <img src="https://images.unsplash.com/photo-1496417263034-38ec4f0b665a?q=80&w=3271&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" />
                                         <span>{booking.hotel.name}</span>
                                         <p>{booking.hotel.location}</p>
-                                    </div>
-
-                                    <div className="mytrip-flight-info">
-                                        <div className="mytrip-srcdes">
-                                            {/* <p>{booking.flight.source}</p> */}
-                                            {/* <span>{booking.flight.departureTime}</span> */}
-                                        </div>
-                                        <div>
-                                            <div className="flight-duration-and-stop-container">
-                                                {/* <div className="flight-hours">{booking.flight.duration} hr</div> */}
-                                                {/* <div className="flight-line-break"></div> */}
-                                                {/* <div className="flight-stop-text">{booking.flight.stops} stop</div> */}
-                                            </div>
-                                        </div>
-                                        <div className="mytrip-srcdes">
-                                            {/* <p>{booking.flight.destination}</p> */}
-                                            {/* <span>{booking.flight.arrivalTime}</span> */}
-                                        </div>
                                     </div>
 
                                     <div className="hidden-flight-excess-information">

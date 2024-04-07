@@ -37,24 +37,91 @@ export default function Checkout() {
     const [email, setEmail] = useState("");
     const [termsChecked, setTermsChecked] = useState(false);
 
-    // Here ive created a state to store the error message while proceeding
+    // function containsOnlyNumbers(str) {
+    //     return /^\d+$/.test(str);
+    // }
+
+    const [phoneNoError, setPhoneNoError] = useState();
+    const [emailError, setEmailError] = useState();
     const [error, setError] = useState("");
+
+    // if (!containsOnlyNumbers(phone)) {
+    //     setPhoneNoError("Please enter a valid phone number")
+    //     setError("Please enter a valid phone number")
+    // }
+
+    // Here ive created a state to store the error message while proceeding
     const [cancellationDiv, setCancellationDiv] = useState(false);
 
     const navigate = useNavigate();
 
-    // This function is called on the click of the continue button
-    const handleContinue = () => {
-        // Here im calling the validateForm function and storing the response inside of the isValid
-        const isValid = validateForm();
+    const validatePhone = (phone) => {
+        if (!/^\d+$/.test(phone)) {
+            setPhoneNoError("Please enter a valid phone number");
+            return false;
+        }
+        setPhoneNoError(null); // Clear the error if phone number is valid
+        return true;
+    };
 
-        // And then im conditionally applying the logic for setting the error and navigating the user to the payment page
+    const validateEmail = (email) => {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+            setEmailError("Please enter a valid email address");
+            return false;
+        }
+        setEmailError(null); // Clear the error if email is valid
+        return true;
+    };
+    
+    
+    const handleContinue = () => {
+        const isValidPhone = validatePhone(phone);
+        const isValidEmail = validateEmail(email);
+    
+        const isValid = validateForm();
         if (!isValid) {
             setError("Please fill in all required fields and accept the terms and conditions.");
-        } else {
+        } 
+        else if (!isValidPhone) {
+            setError("Please enter a valid phone number");
+            setPhone("")
+        }
+        else  if (!isValidEmail) {
+            setError("Please enter a valid email address");
+            setEmail("")
+        }
+        else {
             navigate('/payment');
         }
     };
+
+    // This function is called on the click of the continue button
+    // const handleContinue = () => {
+    //     // Here im calling the validateForm function and storing the response inside of the isValid
+    //     const isValid = validateForm();
+
+    //     // And then im conditionally applying the logic for setting the error and navigating the user to the payment page
+    //     // if (!isValid) {
+    //     //     setError("Please fill in all required fields and accept the terms and conditions.");
+    //     // }
+    //     // else if (phoneNoError) {
+    //     //     setError(phoneNoError);
+    //     // }
+    //     // else {
+    //     //     navigate('/payment');
+    //     // }
+
+    //     if(phoneNoError){
+    //         setError(phoneNoError);
+    //     }
+    //     else if(!isValid){
+    //         setError("Please fill in all required fields and accept the terms and conditions.");
+    //     }
+    //     else {
+    //         navigate('/payment');
+    //     }
+    // };
 
     // This function checks if there is any empty input fields
     const hasEmptyField = (passenger) => {
@@ -576,6 +643,8 @@ export default function Checkout() {
                                 maxLength="10"
                                 value={phone}
                                 onChange={(e) => setPhone(e.target.value)}
+                                placeholder={`${phoneNoError ? "Enter valid phone no" : "Enter phone no"}`}
+                                className={`${phoneNoError && "error-input"}`}
                             />
                         </div>
                     </div>
@@ -593,6 +662,8 @@ export default function Checkout() {
                             onChange={(e) => setEmail(e.target.value)}
                             pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}"
                             title="Please enter a valid email address"
+                            placeholder={`${emailError ? "Enter valid email address" : "Enter email address"}`}
+                            className={`${emailError && "error-input"}`}
                         />
                     </div>
                 </div>

@@ -27,9 +27,10 @@ const tripOption = [
 
 const FlightBookingSection = () => {
     // Here im importing all the state that i want to use inside of this component and also im defining additional stated like index and selectedtrip that will be used inside of this component.
-    const { isActive, setIsActive, setIsActivePassanger, setIsLoggedIn, setLoginModal, loginModal, selectedFlightTrip, setSelectedFlightTrip, setFlightDepartureHiddenDiv, setFlightArrivalHiddenDiv, setShowDate, fareType, setFareType, setPaymentFailureDiv, setRoundFlightDetailsDiv , setHotelAdultCount , setHotelChildCount} = useContext(AuthContext);
+    const { departure, arrival, isActive, setIsActive, setIsActivePassanger, setIsLoggedIn, setLoginModal, loginModal, selectedFlightTrip, setSelectedFlightTrip, setFlightDepartureHiddenDiv, setFlightArrivalHiddenDiv, setShowDate, fareType, setFareType, setPaymentFailureDiv, setRoundFlightDetailsDiv , setHotelAdultCount , setHotelChildCount} = useContext(AuthContext);
     const [index, setIndex] = useState(0);
     const [selectedTrip, setSelectedTrip] = useState("oneway");
+    const [navigationError, setNavigationError] = useState("");
 
     const navigate = useNavigate();
 
@@ -75,6 +76,18 @@ const FlightBookingSection = () => {
 
     if (loginModal) {
         return <LoginModal onClose={() => setLoginModal(false)} onLoginSuccess={handleLoginSuccess} />
+    }
+
+    const navigateToFlight = () => {
+        if(departure === ""){
+            return setNavigationError("Please select departure location")
+        }
+        else if(arrival === ""){
+            return setNavigationError("Please select arrival location")
+        }
+        else{
+            navigate("/flight");
+        }
     }
 
     return (
@@ -174,10 +187,12 @@ const FlightBookingSection = () => {
             {/* Here im importing the date selector component and making a search flight button which navigates me to the list of flights page */}
             <div className='date-selector-and-search-div'>
                 <DateSelector />
-                <div className='search-flights-button' onClick={() => navigate('/flight')}>
+                <div className='search-flights-button' onClick={navigateToFlight}>
                     <span>Search flights</span>
                 </div>
             </div>
+
+            {navigationError && <div className='booking-selection-location-error'>{navigationError}</div>}
         </main>
     )
 }

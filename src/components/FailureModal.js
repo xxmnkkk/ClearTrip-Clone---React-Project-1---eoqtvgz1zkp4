@@ -15,7 +15,7 @@ export default function FailureModal() {
                 <NavLink to="/main" className="failure-navlink">
                     <div className="failure-button">GO TO HOME</div>
                 </NavLink>
-                <p><strong>{error}</strong>. Visit the home page to book flights/hotel by simply clicking the above link</p>
+                <p><strong>{error}</strong>Visit the home page to book flights/hotel by simply clicking the above link</p>
             </div>
         </div>
     )

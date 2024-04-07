@@ -11,6 +11,7 @@ const hotelLocationArray = ['Nagpur, Maharashtra', 'Jodhpur, Rajasthan', 'Amrits
 function HotelBookingSection() {
     // Here im importing my states and also defining local state
     const [hotelLocation, setHotelLocation] = useState("");
+    const [hotelLocationError, setHotelLocationError] = useState("");
     const { hiddenDiv, setHiddenDiv, hotelLocationHiddenDiv, setHotelLocationHiddenDiv, updateHotelLocation, roomCount, setRoomCount, hotelAdultCount, setHotelAdultCount, hotelChildCount, setHotelChildCount, setShowDate , setAdultCount , setChildCount , setInfantCount} = useContext(AuthContext);
 
     const navigate = useNavigate();
@@ -63,6 +64,15 @@ function HotelBookingSection() {
         setHotelLocation(location);
         setHotelLocationHiddenDiv(false);
         updateHotelLocation(location);
+    }
+
+    const navigateToHotel = () => {
+        if(hotelLocation === ""){
+            return setHotelLocationError("Please select hotel location")
+        }
+        else{
+            navigate("/hotel")
+        }
     }
 
     return (
@@ -152,10 +162,12 @@ function HotelBookingSection() {
 
             {/* A simple hotel search button which navigated us to a page with hotel list */}
             <div className="search-hotel-button-container">
-                <div className='search-hotels-button' onClick={() => navigate('/hotel')}>
+                <div className='search-hotels-button' onClick={navigateToHotel}>
                     <span>Search hotels</span>
                 </div>
             </div>
+
+            {hotelLocationError && <div className="booking-selection-location-error">{hotelLocationError}</div>}
         </div>
     )
 }
