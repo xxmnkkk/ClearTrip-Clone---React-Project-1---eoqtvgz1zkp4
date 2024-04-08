@@ -4073,13 +4073,13 @@
   }
 }
 
-.booking-selection-location-error{
+.booking-selection-location-error {
   width: 100%;
   text-align: center;
   color: red;
 }
 
-.error-input::placeholder{
+.error-input::placeholder {
   color: red;
 }
 
@@ -4161,6 +4161,15 @@
     }
   }
 
+  .start-date,
+  .end-date {
+    font-size: 12px;
+  }
+
+  .dep-arr input::placeholder {
+    font-size: 12px;
+  }
+
   .flight-booking-section {
     position: relative;
     margin: 0px 0px 0px -10px;
@@ -4183,22 +4192,29 @@
       display: flex;
       flex-direction: column;
       /* align-items: flex-start; */
-      gap: 0;
+      gap: 10px;
 
       >.passanger-button-container {
-        margin-left: 11px;
-        width: 95%;
+        width: 100%;
+        border: 1px solid lightgray;
+        border-radius: 10px;
+        height: 50px;
+        display: flex;
+        justify-content: center;
 
         >.passenger-button {
           width: inherit;
           text-wrap: wrap;
           font-size: 14px;
           gap: 5px;
-          /* justify-content: center; */
+          height: 30px;
+          width: fit-content;
+          font-weight: 600;
         }
 
         >.passanger-hidden-div {
           width: 80%;
+          top: 120px;
 
           >.passanger-div-section .class-buttons {
             margin-bottom: 10px;
@@ -4207,9 +4223,25 @@
       }
 
       >.trip-button-container {
+        width: 100%;
+        border: 1px solid lightgray;
+        border-radius: 10px;
+        height: 50px;
+        display: flex;
+        justify-content: center;
 
         >.trip-button {
           font-size: 14px;
+          height: 30px;
+
+          >span {
+            font-weight: 600;
+          }
+        }
+
+        >.trip-hidden-div {
+          top: 60px;
+          z-index: 2;
         }
       }
     }
@@ -4224,13 +4256,14 @@
       }
 
       >.flight-hidden-div {
-        width: 100%;
+        width: 92%;
       }
 
       >.flight-arrival-hidden-div {
         position: absolute;
         left: 0;
-        width: 100%;
+        width: 92%;
+        padding: 12px;
       }
     }
 
@@ -4308,7 +4341,22 @@
 
   .adds-div {
     width: 100%;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     /* margin-left: 3px; */
+
+    >.card-container-img {
+      margin: 0;
+
+      >.image-container {
+
+        >img {
+          position: relative;
+        }
+      }
+    }
   }
 
   .app-download-div {
@@ -4316,7 +4364,7 @@
   }
 
   .useless-text-container {
-    margin-top: 200px;
+    margin-top: 70px;
 
     >.useless-text-child-container {
       width: 80%;
@@ -4703,6 +4751,7 @@
     gap: 10px;
     height: fit-content;
     margin: 10px 0;
+    padding: 30px;
   }
 
   .filtered-hotel-card-section {
@@ -4766,6 +4815,18 @@
 
     >.hotel-card {
       width: 100%;
+
+      >.hotel-card-info {
+
+        >.hotelname-and-rating-container {
+
+          >.hotel-rating {}
+
+          >.hotel-name {
+            width: 65%;
+          }
+        }
+      }
     }
   }
 
@@ -4835,6 +4896,7 @@
 
         >div p {
           font-size: 16px;
+          grid-template-columns: 1fr 1fr;
         }
       }
     }
@@ -4854,9 +4916,20 @@
 
     >.selected-hotel-room-container {
       grid-template-columns: 1fr;
+      width: 95%;
 
       >.room-container {
         width: 80%;
+        height: fit-content;
+
+        >.selected-hotel-room-price {
+          margin-left: 60%;
+        }
+      }
+
+      >.room-container button {
+        height: 40px;
+        width: 200px;
       }
     }
   }
@@ -4880,6 +4953,27 @@
 
         >.checkout-hotel-price {
           width: 100%;
+        }
+
+        >.checkout-hotel-info-container {
+          width: 100%;
+
+          >.checkout-hotel-image {
+            width: 100%;
+            overflow: hidden;
+
+            >img {
+              min-width: 100%;
+            }
+          }
+
+          >.checkout-hotel-location-and-rating {
+            width: 100%;
+
+            >span {
+              font-size: 14px;
+            }
+          }
         }
       }
 
@@ -5107,12 +5201,36 @@
   .success-modal,
   .failure-modal {
     width: 90%;
-    height: 60%;
+    height: fit-content;
+    gap: 15px;
+    padding: 10px 0;
+
+    >.payment-successful , .payment-failure{
+      font-size: 20px;
+    }
+
+    >.success-navlink .success-button {
+      font-size: 18px;
+    }
+
+    >.failure-navlink .failure-button{
+      font-size: 18px;
+    }
 
     >p {
-      font-size: 16px;
+      font-size: 14px;
       padding: 10px;
       text-align: center;
+    }
+
+    >.failure-image {
+      width: 200px;
+      height: 200px;
+
+      >img {
+        width: 200px;
+        height: 200px;
+      }
     }
   }
 
@@ -5141,8 +5259,6 @@
       overflow: initial;
       margin-bottom: 40px;
 
-      >.mytrip-bookign-switcher {}
-
       >.mytrip-flight-card {
         margin: 20px;
         padding: 20px;
@@ -5152,6 +5268,20 @@
           gap: 10px;
         }
       }
+    }
+  }
+
+  .hotel-location-hidden-div-container {
+    /* overflow: visible; */
+  }
+
+  .flight-hidden-div {
+    padding: 12px;
+    width: 95%;
+
+    >.flight-location-container {
+      width: 100%;
+
     }
   }
 }

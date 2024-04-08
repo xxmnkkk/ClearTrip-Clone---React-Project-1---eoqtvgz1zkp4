@@ -106,6 +106,8 @@ function App() {
           <Route path="/payment/success" element={<SuccessModal />} />
         </Routes>
 
+        {/* <SuccessModal /> */}
+        {/* <FailureModal /> */}
         <Footer />
       </AuthContext.Provider>
     </>
