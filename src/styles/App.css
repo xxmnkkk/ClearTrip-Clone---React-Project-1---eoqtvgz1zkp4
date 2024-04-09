@@ -384,6 +384,7 @@
 .dep-arr input:focus {
   outline: none;
   border: none;
+  scale: 1;
 }
 
 .svg-container {
