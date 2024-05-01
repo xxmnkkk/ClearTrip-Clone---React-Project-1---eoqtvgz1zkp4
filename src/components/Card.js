@@ -7,7 +7,7 @@ export default function Card() {
     console.log("Offer data: ", offerData)
 
     const [currentIndex, setCurrentIndex] = useState(0);
-console.log("current index: ", currentIndex);
+    console.log("current index: ", currentIndex);
     useEffect(() => {
         const config = {
             headers: {
@@ -40,21 +40,31 @@ console.log("current index: ", currentIndex);
     return (
         <div className='adds-div'>
             {offerData && offerData.map((data, index) => (
-                <div className={`${currentIndex === index ? "card-container-block" : "card-container-none"}`} key={index}>
-                    <div className="card-container">
-                        <p className="card-title">{data.offerPersuasion}</p>
-                        <p className="card-description">{data.pTl}</p>
-                        <p className="card-description">{data.pTx}</p>
+                    <div className={`${currentIndex === index ? "card-container-block" : "card-container-none"}`} key={index}>
+                        <div className="card-container">
+                            <p className="card-title">{data.offerPersuasion}</p>
+                            <p className="card-description">{data.pTl}</p>
+                            <p className="card-description">{data.pTx}</p>
+                        </div>
                     </div>
-                </div>
             ))}
 
 
-            <div class="card-container-img">
-                <div class="image-container">
-                    <img src="https://fastui.cltpstatic.com/image/upload/f_auto,q_auto,w_260,h_205,dpr_2/offermgmt/images/banner/RR_ctupi_flights_1610.png" alt="img" class="card-image" width="260" height="205" />
-                </div>
-            </div>
+            {
+                offerData && offerData.map((data, index) => (
+                    <div
+                        className={`card-container-img ${currentIndex === index ? "card-container-block" : "card-container-none"}`}
+                        key={index}>
+
+                            <img src={data.heroUrl} alt="img" className="card-image" />
+                    </div>
+                ))
+            }
         </div>
     )
 }
+
+// ${currentIndex === index ? "card-container-block" : "card-container-none"}
+ {/* <div className="image-container">
+                            {/* <img src={data.heroUrl} alt="img" className="card-image" /> */}
+                      //  </div> */}
